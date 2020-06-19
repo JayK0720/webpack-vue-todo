@@ -30,7 +30,8 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
     plugins:[new VueLoaderPlugin()]
 }
 ```
-    Since webpack v4 the extract-text-webpack-plugin should not be used for css. Use mini-css-extract-plugin instead.
+    Since webpack v4 the extract-text-webpack-plugin should not be used for css. Use mini-css-extract-plugin 
+    instead.
     
     安装cross-env包，解决不同系统之间命令兼容问题。
         yarn add cross-env --save-dev

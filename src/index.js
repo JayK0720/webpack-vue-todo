@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './app.vue';
-import './images/background.png';
 import './style/index.scss';
 
 const root = document.createElement('div');
