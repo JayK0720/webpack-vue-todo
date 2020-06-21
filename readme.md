@@ -33,6 +33,8 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
     Since webpack v4 the extract-text-webpack-plugin should not be used for css. Use mini-css-extract-plugin 
     instead.
     
+![bug](https://github.com/JayK0720/webpack-vue-todo/blob/master/imgs/bug-1.png)   
+
     安装cross-env包，解决不同系统之间命令兼容问题。
         yarn add cross-env --save-dev
 ```js
