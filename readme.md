@@ -40,11 +40,41 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
 
 "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "server": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js"
 },
 ```
     npm run build   // production
     npm run dev  // development
+    
+## postcss
+    
+    yarn add postcss-loader autofixer --save-dev
+```js
+// Usage
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+            'style-loader',
+            {loader:'css-loader',options:{importLoaders:1}},
+             'postcss-loader'
+        ],
+      },
+    ]
+  }
+}
+
+// postcss.config.js
+module.exports = {
+    plugins:[
+        require('precss'),
+        require('autoprefixer')
+    ]
+}
+```
     
 ## plugins
 
@@ -68,6 +98,29 @@ const isDev = process.env.NODE_ENV === 'development';
             1. 保留在完全重新加载页面时丢失的应用程序状态
             2. 只更新变更内容
             3. 调整样式更加快速
+            
+        启用此功能就是更新webpack-dev-server的配置和使用webpack内置的HMR插件。
+            
+     tips:
+        HMR不适用于生产环境,这意味着它应当只在开发环境使用。
+```js
+// Usage
+{
+    'devServer':{
+        hot:true,   
+        overlay:{
+            errors:true // 遇到错误时会更新到页面上
+        },
+        open:true   // 会自动打开浏览器
+    },
+    plugins:[
+        new HotModuleReplacementPlugin()
+    ]
+}
+```
+    
+            
+    
     
     
     
