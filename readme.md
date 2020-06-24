@@ -1,5 +1,7 @@
 # webpack-vue-todo
 
+!(preview)[https://github.com/JayK0720/webpack-vue-todo/blob/master/imgs/demo.png]
+
     使用webpack 和 vue 打造的 todo 应用。
     
     install:
@@ -77,6 +79,41 @@ module.exports = {
     ]
 }
 ```
+
+## bebel-loader
+
+    Babel是一个工具链,主要用于在旧的浏览器或者环境中将ECMAScript2015+代码转为向后兼容版本的JavaScript代码。
+        tips: Babel不会进行类型检查。
+    
+    yarn add --save-dev babel-loader @babel/core @babel/preset-env
+
+```js
+// Usage
+
+// webpack.config.js
+module.exports = {
+    rules:[
+        {
+            test:/\.js$/,
+            exclude:/node_modules/,
+            use:[
+                {
+                    loader:'babel-loader',
+                    options:{
+                        "presets":['@babel/env']
+                    }
+                }
+            ]
+        }
+    ]
+}
+
+
+// .babelrc  JSON文件
+{
+    "presets":["@babel/preset-env"]
+}
+```
     
 ## plugins
 
@@ -120,7 +157,8 @@ const isDev = process.env.NODE_ENV === 'development';
     ]
 }
 ```
-    
+
+   
             
     
     

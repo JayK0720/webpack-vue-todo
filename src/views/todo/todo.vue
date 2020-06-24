@@ -10,13 +10,13 @@
             >
         </div>
         <div class="todo-list">
-            <Todo
+            <todo-item
                 v-for="(todo,index) in filterTodoList"
                 :key="index"
                 :todo="todo"
                 @del="deleteTodo"
             />
-            <Tabs
+            <tabs
                 :filter="filter"
                 :todos="todos"
                 @toggle="toggleFilter"
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import Todo from './item.vue';
+    import TodoItem from './todo-item.vue';
     import Tabs from './tabs.vue';
 
     let nextId = 0;
@@ -39,19 +39,11 @@
             }
         },
         components:{
-            Todo,
+            TodoItem,
             Tabs
         },
         computed:{
             filterTodoList(){
-/*                switch(this.filter){
-                    case "completed":
-                        return this.todos.filter(todo => todo.completed);
-                    case "active":
-                        return this.todos.filter(todo => !todo.completed);
-                    default:
-                        return this.todos;
-                }*/
                 if(this.filter === 'all'){
                     return this.todos;
                 }

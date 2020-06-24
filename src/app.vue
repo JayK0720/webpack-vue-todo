@@ -8,9 +8,9 @@
 </template>
 
 <script>
-    import vHeader from './todo/v-header.vue';
-    import vFooter from './todo/v-footer.vue';
-    import todo from './todo/todo.vue';
+    import vHeader from './layout/v-header.vue';
+    import vFooter from './layout/v-footer.vue';
+    import todo from './views/todo/todo.vue';
     export default {
         data() {
             return {
