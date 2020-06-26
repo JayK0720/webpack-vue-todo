@@ -16,7 +16,8 @@ const defaultPlugins = [
         hash:true,
         minify:{
             removeAttributeQuotes:true
-        }
+        },
+        title:"webpack-vue-todo"
     }),
     new webpack.DefinePlugin({
         "process_env":{

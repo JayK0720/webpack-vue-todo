@@ -1,5 +1,5 @@
 # webpack-vue-todo
-
+        
 !(preview)[https://github.com/JayK0720/webpack-vue-todo/blob/master/imgs/demo.png]
 
     使用webpack 和 vue 打造的 todo 应用。
@@ -7,9 +7,9 @@
     install:
         安装需要的依赖：
 ```js
-// yarn add webpack --save-dev
-// yarn add webpack-cli --save-dev
-// yarn add vue vue-loader vue-template-compiler --save-dev
+// yarn add webpack -save-dev
+// yarn add webpack-cli -save-dev
+// yarn add vue vue-loader vue-template-compiler -save-dev
 ```
 ```js
 // webpack.config.js
@@ -38,7 +38,7 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
 ![bug](https://github.com/JayK0720/webpack-vue-todo/blob/master/imgs/bug-1.png)   
 
     安装cross-env包，解决不同系统之间命令兼容问题。
-        yarn add cross-env --save-dev
+        yarn add cross-env -save-dev
 ```js
 // package.json
 
@@ -49,6 +49,14 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
 ```
     npm run build   // production
     npm run dev  // development
+    
+
+# configuration
+
+    devtool 仅用于开发环境。
+    
+    当webpack打包源代码时,可能会很难追踪到错误和警告在源代码中到原始位置。为了更容易地追踪错误和警告，JavaScript提供了source map
+    功能，将编译后的代码映射回原始代码。
     
 ## postcss
     
@@ -158,7 +166,34 @@ const isDev = process.env.NODE_ENV === 'development';
 }
 ```
 
-   
+## 管理输出
+    
+    通常再每次构建前清理/dist文件夹是比较推荐的做法。因此只会生成用到的文件。
+    
+    clean-webpack-plugin
+        yarn add clean-webpack-plugin -D
+```js
+// Usage
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+{
+    plugins:[new CleanWebpackPlugin()]
+}
+```
+
+    rimraf 包
+        npm install rimraf -D
+    
+    以下配置先删除之前的dist包然后再重新打包
+```js
+// Usage
+// package.json
+{
+    "scripts":{
+        "clean":"rimraf dist",
+        "build":"npm run clean && npm run build"
+    }
+}
+```
             
     
     
