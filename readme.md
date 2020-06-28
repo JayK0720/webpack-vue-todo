@@ -194,7 +194,40 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
     }
 }
 ```
-            
+## resolve
+
+    这些选项能设置模块如何被解析。
+    
+    创建import 或 require的别名，来确保模块引入变得更加简单。
+```js
+// webpack.config.js
+{
+    alias:{
+        Utilities:path.resolve(__dirname,'src/utilities'),
+        Templates:path.resolve(__dirname,"src/templates")
+    }
+}
+```
+    配置好后可以这样使用别名：
+        import Utility from 'Utilities/utility';    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+             
     
     
     

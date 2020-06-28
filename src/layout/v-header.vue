@@ -4,12 +4,14 @@
     </div>
 </template>
 
-<style scoped lang='scss'>
-    .title{
-        text-align:center;
-        font-size:100px;
-        color:rgba(175,47,47,.4);
-        font-weight:bold;
-        margin:20px;
+<style scoped lang='scss' module>
+    .title-wrapper{
+        .title{
+            text-align:center;
+            font-size:100px;
+            color:rgba(175,47,47,.4);
+            font-weight:bold;
+            margin:20px;
+        }
     }
 </style>
