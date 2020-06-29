@@ -46,7 +46,8 @@ module.exports = {
             "process.env":{
                 NODE_ENV:"'development'"
             }
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ],
     resolve:{
         //  创建 import或require的别名，来确保模块引入变得更简单。

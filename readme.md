@@ -210,7 +210,64 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 ```
     配置好后可以这样使用别名：
         import Utility from 'Utilities/utility';    
+        
+## Vue options
+
+    watch 选项， 当在vue选项 使用watch时，在页面跳转 不使用watch监听的数据时会自动销毁watch。
     
+    如果是手动添加$watch 需要监听的数据，会返回一个unWatch方法，可以调用该方法来 注销监听事件。
+```js
+const vm = new Vue({
+    template:`<p>Hello,Vue.js -- {{text}}</p>`,
+    data:{
+        text:0
+    },
+    watch:{
+        text(newValue,oldValue){
+            console.log(`${newValue}--${oldValue}`)
+        }
+    }
+})
+```
+```js
+// 手动监听 text 数据变化，并且在2000ms后注销监听
+const unWatch = vm.$watch('text',(newValue,oldValue) => {
+    console.log(`${newValue}-${oldValue}`);
+});
+
+setInterval(() => {
+    unWatch();
+},2000);
+```
+    
+    watch detail:
+        一个对象，键是需要观察的表达式,值是对应回调函数。值也可以是方法名，或者包含选项的对象。Vue实例将会在实例
+        化时调用$watch(),遍历watch对象的每一个property。
+```js
+var vm = new Vue({
+  data: {
+    a: 1,
+    b: 2,
+  },
+  watch: {
+    a: function (val, oldVal) {
+      console.log('new: %s, old: %s', val, oldVal)
+    },
+    // 方法名
+    b: 'someMethod',
+    // 该回调会在任何被侦听的对象的 property 改变时被调用，不论其被嵌套多深
+    c: {
+      handler: function (val, oldVal) { /* ... */ },
+      deep: true
+    },
+    // 该回调将会在侦听开始之后被立即调用
+    d: {
+      handler: 'someMethod',
+      immediate: true
+    }
+  }
+})
+```
     
     
     

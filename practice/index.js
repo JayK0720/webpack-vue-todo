@@ -1,6 +1,4 @@
-import Vue from 'vue';
-
-new Vue({
-    el:'#root',
-    template:`<p>Hello,Vue.js</p>`
-})
+// import Instance from './instance/index.js';
+// import LifeCycle from './lifecycle/index.js'
+// import './data-binding/index.js';
+import './directive/index.js';
