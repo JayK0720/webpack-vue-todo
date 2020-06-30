@@ -32,7 +32,9 @@ const vm = new Vue({
         </p>
         <p>selected:{{checkedNames}}</p>
         <p>
+            <label for="">male</label>
             <input type="radio" value="male" v-model="sex">
+            <label for="">female</label>
             <input type="radio" value="female" v-model="sex">
         </p>
         <p>selected:{{sex}}</p>
@@ -45,6 +47,16 @@ const vm = new Vue({
             </select>
             <span>selected:{{selected}}</span>
         </p>
+        <div>
+            <select v-model='picked' multiple>
+                <option disabled>请选择你最喜欢的球员</option>
+                <option 
+                    v-for="(player,index) in players"
+                    :key="player"
+                >{{player}}</option>
+            </select>
+            <p>选中的球员: {{picked}}</p>
+        </div>
     </div>`,
     data:{
         message:"Hello World",
@@ -57,6 +69,7 @@ const vm = new Vue({
         },
         checkedNames:[],
         sex:'male',
-        selected:""
+        selected:"",
+        picked:[]
     }
 })
