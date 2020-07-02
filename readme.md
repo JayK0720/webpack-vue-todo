@@ -269,7 +269,29 @@ var vm = new Vue({
 })
 ```
     
+## Vue组件上的 v-model
     
+    一个组件上的v-model默认会利用名为value的prop和名为input的事件，但是像单选框 复选框等类型的输入控件可能会将
+    value attribute用于不同目的。model选项可以用来避免这样的冲突
+```js
+Vue.component('base-checkbox',{
+    props:['checked'],
+    model:{
+        prop:'checked',
+        event:'change'
+    },   
+    template:`<input 
+        type='checkbox'
+        :checked='checked',
+        @change='handleChange'
+    />`,
+    methods:{
+        handleChange(event){
+            this.checked = event.target.checked;
+        }
+    }
+})
+```
     
     
     

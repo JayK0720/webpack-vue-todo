@@ -39,7 +39,6 @@ const ChildComponent = {
 }
 
 
-
 Vue.component('blog-post',{
     props:{
         likes:{
@@ -73,25 +72,97 @@ Vue.component('blog-post',{
     </div>`
 })
 
+Vue.component('data-date-picker',{
+    template:`<div class="data-picker">
+        <input type="text" v-model="date">
+        <p>date:{{date}}</p>
+    </div>`,
+    data(){
+        return {
+            date:new Date().getDate()
+        }
+    },
+    props:{
+        activated:{
+            validator(value){
+                return typeof value === 'number';
+            }
+        }
+    }
+});
+
+Vue.component('base-input',{
+    props:['value'],
+    template:`<input 
+        type="text"
+        :value="value"
+        @input="$emit('input',$event.target.value)"
+    />`,
+})
+
+
+Vue.component('blog-content',{
+    props:['post'],
+    template:`<div>
+        <h3>{{post.title}}</h3>
+        <button @click="handleEnlargeText">Enlarge text</button>
+        <div v-html="post.content"></div>
+    </div>`,
+    methods:{
+        handleEnlargeText(){
+            this.$emit("enlarge-text",123)
+        }
+    }
+})
+
 
 const vm = new Vue({
     el:'#root',
     template:`<div>
         <p>{{message}}</p>
-            <button-counter/>
-            <child-component :show="true" post-title="hello,I am post title"/>
-            <child-component :show="false" post-title="hello,I am post title"/>
-            <blog-post
-                :likes="42"
-                :is-published="false"
-                :commend-ids="[123,456,789]"
-                :author="{name:'kyrie',company:'Veridian Dynamics'}"
+        <button-counter/>
+        <child-component :show="true" post-title="hello,I am post title"/>
+        <child-component :show="false" post-title="hello,I am post title"/>
+        <blog-post
+            :likes="42"
+            :is-published="false"
+            :commend-ids="[123,456,789]"
+            :author="{name:'kyrie',company:'Veridian Dynamics'}"
+        />
+        <data-date-picker :activated="123"/>
+        <base-input
+            v-model="username"
+            placeholder="Enter your username"
+        />
+        <base-input
+            v-model.number="age"
+            placeholder="Enter your age"
+        />
+        <base-input
+            v-model="email"
+            placeholder="Enter your email"
+        />
+        <div :style="{fontSize:postFontSize + 'em'}">
+            <blog-content 
+                :post="{title:'hello,post-title',content:'我是blog内容'}"
+                @enlarge-text="handleEnlargeText"
             />
+        </div>
     </div>`,
     data:{
         message:"Hello World",
+        username:'',
+        age:26,
+        email:'',
+        postFontSize:1
     },
     components:{
         ChildComponent
+    },
+    methods:{
+        handleEnlargeText(data){
+            console.log(data);
+            this.postFontSize += 0.1;
+        }
     }
 })
