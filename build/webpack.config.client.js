@@ -2,14 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
-
 const merge = require('webpack-merge');
 
 const baseConfig = require('./webpack.config.base.js');
 
 let config;
-
-console.log(process.env.NODE_ENV);
 
 const defaultPlugins = [
     new HtmlPlugin({
@@ -17,7 +14,8 @@ const defaultPlugins = [
         minify:{
             removeAttributeQuotes:true
         },
-        title:"webpack-vue-todo"
+        title:"webpack-vue-todo",
+        template:path.join(__dirname,'./template.html')
     }),
     new webpack.DefinePlugin({
         "process_env":{
@@ -61,6 +59,7 @@ if(process.env.NODE_ENV === "development"){
             compress:true,
             hot:true,  // 启动热更新
             open:true,// 会自动打开浏览器
+            historyApiFallback:true
         },
         plugins:defaultPlugins.concat([
             new webpack.HotModuleReplacementPlugin()

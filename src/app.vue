@@ -2,7 +2,7 @@
     <div class="real-app">
         <div class="cover"></div>
         <vHeader/>
-        <todo/>
+        <router-view/>
         <vFooter/>
     </div>
 </template>

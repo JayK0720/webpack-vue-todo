@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import App from './app.vue';
 import './style/index.scss';
+import router from './route/index.js';
 
-const root = document.createElement('div');
-document.body.appendChild(root);
 
 new Vue({
-    render:(h) => h(App)
-}).$mount(root);
+    render:(h) => h(App),
+    router
+}).$mount("#root");

@@ -165,6 +165,18 @@ const isDev = process.env.NODE_ENV === 'development';
     ]
 }
 ```
+    devServer.historyApiFallback
+        当使用HTML5 History API时,任意的404 响应都可能需要被替代为index.html. 
+    
+    devServer.host
+        指定一个host,默认是localhost。如果你希望服务器外部可访问,指定如下:
+```js
+// 通过传入 以下方式启动:
+{
+    historyApiFallback:true,
+    host:'0.0.0.0'
+}
+```
 
 ## 管理输出
     
