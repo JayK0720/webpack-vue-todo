@@ -304,9 +304,38 @@ Vue.component('base-checkbox',{
     }
 })
 ```
-    
-    
-    
+
+# Vue-Router Configuration
+
+    1. scrollBehavior  这个功能只在支持 history.pushState的浏览器中可用。
+```js
+const router = new VueRouter({
+    // routes:[...],
+    scrollBehavior(to,from,savedPosition){
+        if(savedPosition){
+            return savedPosition;
+        }else{
+            return {x:0,y:0}
+        }
+    }
+})
+```
+    全局前置守卫
+        可以通过 router.beforeEach 注册一个全局前置守卫: 
+```js
+const router = new VueRouter({...});
+router.beforeEach((to,from,next) => {
+    // ...
+})
+```
+    全局后置钩子
+        可以通过 router.afterEach 注册一个全局后置钩子 参数没有next。
+```js
+const router = new VueRouter({...});
+router.afterEach((to,from) => {
+    // ...
+})
+```
     
     
     

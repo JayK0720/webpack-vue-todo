@@ -1,1 +1,1 @@
-import './render/index.js';
+import './vuex/index.js';

@@ -70,6 +70,18 @@
             clearCompleted(){
                 this.todos = this.todos.filter(todo => !todo.completed);
             }
+        },
+        beforeRouteEnter(to,from,next){
+            console.log('todo route before enter invoked');
+            next();
+        },
+        beforeRouteUpdate(to,from,next){
+            console.log('todo route before update invoked');
+            next();
+        },
+        beforeRouteLeave(to,from,next){
+            console.log('todo route before leave invoked');
+            next();
         }
     }
 </script>
