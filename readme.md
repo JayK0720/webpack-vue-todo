@@ -222,7 +222,64 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 ```
     配置好后可以这样使用别名：
         import Utility from 'Utilities/utility';    
-        
+ 
+## 外部扩展(externals)
+    
+    externals配置选项提供了【从输出的bundle中排除依赖】的方法。相反所创建的bundle依赖于那些存在于用户环境
+    (consumer's environment)中的依赖。
+    
+    防止将某些 import的包 打包到bundle中，而是在运行时再去从外部获取这些扩展依赖。
+```js
+module.exports = {
+  //...
+  externals: {
+    jquery: 'jQuery'
+  }
+};
+```
+    如果想将fs-extra从输出的bundle中剔除并在运行时引入它，你可以如下定义:
+```js
+// Example
+module.exports = {
+// ...
+    externals:{
+        'fs-extra':'commonjs2 fs-extra'
+    }
+}
+```
+
+## target
+
+    由于JavaScript既可以编写服务端代码也可以编写浏览器代码，所以webpack提供了多种部署target。
+```js
+// Usage
+// webpack.config.js
+module.exports = {
+    target:'node'
+}
+```
+    多target
+```js
+const path = require('path');
+const serverConfig = {
+    target:'node',
+    output:{
+        path:path.resolve(__dirname,'dist'),
+        filename:'lib.node.js'
+    }
+}
+
+const clientConfig = {
+    target:'web',
+    output:{
+        path:path.resolve(__dirname,'dist'),
+        filename:'lib.js'
+    }
+}
+
+module.exports = [serverConfig,clientConfig];
+```
+
 ## Vue options
 
     watch 选项， 当在vue选项 使用watch时，在页面跳转 不使用watch监听的数据时会自动销毁watch。
@@ -336,7 +393,32 @@ router.afterEach((to,from) => {
     // ...
 })
 ```
+
+## Vue服务端渲染
+
+    vue-server-renderer
     
+    install:
+        yarn add vue-server-renderer -S
+        
+```js
+//    usage:
+// webpack.config.server.js
+const VueServerPlugin = require('vue-server-renderer');
+
+module.exports = {
+    target:'node',
+    output:{
+        libraryTarget:'commonjs2',
+        //...
+    },
+    externals:Object.keys( require('./package.json')['dependencies'] ),
+    plugins:[
+        new VueServerPlugin()``
+    ]
+}
+```
+      
     
     
     
