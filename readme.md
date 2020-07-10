@@ -54,9 +54,46 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
 # configuration
 
     devtool 仅用于开发环境。
+        当webpack打包源代码时,可能会很难追踪到错误和警告在源代码中到原始位置。为了更容易地追踪错误和警告，JavaScript提供了
+        source map 功能，将编译后的代码映射回原始代码。
+
+    使用watch mode [观察模式]
+```js
+// package.json
+{
+//...
+    "watch":"webpack --watch"
+//...
+}
+```
+    npm run watch，每次修改后保存文件可以看到webpack如何编译代码。
     
-    当webpack打包源代码时,可能会很难追踪到错误和警告在源代码中到原始位置。为了更容易地追踪错误和警告，JavaScript提供了source map
-    功能，将编译后的代码映射回原始代码。
+    webpack-dev-server
+        
+        webpack-dev-server提供了一个简单的web server,并且具有live reloading（实时重新加载）功能。
+    install:
+        yarn add --save-dev webpack-dev-server
+    
+    Usage:
+```js
+// webpack.config.js  
+module.exports = {
+    target:'web',
+    devServer:{
+        contentBase:'./dist',   // 告知webpack-dev-server，将dist目录下的文件serve 到 localhost:8080下。
+        port:"8080",
+        host:"localhost"
+    }
+}
+```
+    webpack-dev-server在编译之后不会写入到任何输出文件。而是将bundle文件保留在内存中。然后将它们serve到server中。
+    
+    
+    webpack-dev-middleware
+    
+    install:
+        yarn add webpack-dev-middleware --save-dev
+    
     
 ## postcss
     
@@ -400,7 +437,90 @@ router.afterEach((to,from) => {
     
     install:
         yarn add vue-server-renderer -S
-        
+```js
+// Usage
+// 第 1 步：创建一个 Vue 实例
+const Vue = require('vue')
+const app = new Vue({
+  template: `<div>Hello World</div>`
+})
+
+// 第 2 步：创建一个 renderer
+const renderer = require('vue-server-renderer').createRenderer();
+
+// 第 3 步：将 Vue 实例渲染为 HTML
+renderer.renderToString(app, (err, html) => {
+  if (err) throw err
+  console.log(html)
+  // => <div data-server-rendered="true">Hello World</div>
+})
+```        
+    
+    使用一个页面模版
+```html
+<!-- template.html -->
+
+<!DOCTYPE html>
+   <html lang="en">
+     <head><title>Hello</title></head>
+     <body>
+       <!--vue-ssr-outlet-->    这里一定要加上注释
+     </body>
+   </html>
+```
+    模版插值 
+        {{title}}   // 使用花括号进行HTML转义插值
+        {{{meta}}}  // 使用三花括号进行HTML不转义插值 
+    
+    可以通过传入一个 '渲染上下文对象'作为 renderToString函数的第二个参数
+```js
+// app.js 一个完整的DEMO
+const Vue = require('vue');
+const server = require('express')();
+const fs = require('fs');
+
+const renderer = require('vue-server-renderer').createRenderer({
+    template:fs.readFileSync('./template.html','utf-8')
+});
+
+const context = {
+    title:"我是通过模版插值的形式",
+    meta:`
+        <meta charset="utf-8">
+        <meta name="keyword" content="vue-ssr">
+        <meta name="description" content="vue ssr demo">
+    `
+}
+
+server.get('/',(req,res) => {
+    res.writeHead(200,{
+        'Content-Type':"text/html;charset=utf-8"
+    })
+    const app = new Vue({
+        data:{
+            url:req.url,
+            message:'Hello Vue.js'
+        },
+        template:'<div><p>你访问的路径是{{url}}</p><p>{{message}}</p></div>'
+    });
+    renderer.renderToString(app,context,(err,html) => {
+        if(err) {
+            res.status(500).end("Internal Server Error");
+            return;
+        }
+        res.end(html);
+    })
+})
+
+server.listen(8080,() => {
+    console.log('server listening at port 8080');
+});
+```
+## 通用代码
+
+    1. 默认情况下，在服务端禁用响应式数据。
+    2. 在服务端所有的生命周期钩子函数中，只有beforeCreate和created会在服务器端渲染过程中被调用。
+
 ```js
 //    usage:
 // webpack.config.server.js
