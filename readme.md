@@ -474,7 +474,7 @@ renderer.renderToString(app, (err, html) => {
     
     可以通过传入一个 '渲染上下文对象'作为 renderToString函数的第二个参数
 ```js
-// app.js 一个完整的DEMO
+// index.js 一个完整的DEMO
 const Vue = require('vue');
 const server = require('express')();
 const fs = require('fs');
@@ -520,6 +520,10 @@ server.listen(8080,() => {
 
     1. 默认情况下，在服务端禁用响应式数据。
     2. 在服务端所有的生命周期钩子函数中，只有beforeCreate和created会在服务器端渲染过程中被调用。
+    
+    router.onReady(callback,[errorCallback])
+        该方法把一个回调排队,在路由完成初始化导航时调用，这意味着它可以解析所有的异步进入钩子和路由初始化相关联的异步操作。
+        这可以有效确保服务端渲染时服务端和客户端输出的一致。
 
 ```js
 //    usage:
@@ -539,7 +543,15 @@ module.exports = {
 }
 ```
       
-    
+## webpack插件
+
+    Usage:
+        const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
+        const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');  
+        
+    生成的默认文件是:
+        vue-ssr-server-bundle.json      用于服务器端插件
+        vue-ssr-client-manifest.json    用于客户端插件
     
     
     

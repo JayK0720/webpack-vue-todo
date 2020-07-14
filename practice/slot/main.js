@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-
 Vue.component('todo-list', {
     props: {
         todos: {
