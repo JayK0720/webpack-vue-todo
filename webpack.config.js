@@ -9,13 +9,14 @@ const isDev = process.env.NODE_ENV === "development";
 const config = {
     mode:'development',
     target:"web",
-    entry:path.join(__dirname,'src/index.js'),
+    entry:path.join(__dirname,'src/app.js'),
     output:{
         filename:'bundle.[hash:8].js',
         path:path.resolve(__dirname,'dist')
     },
     module:{
         rules:[
+
             {
                 test:/\.(png|jpg|jpeg|gif|svg)/,
                 use:[
@@ -53,7 +54,7 @@ const config = {
             minify:{removeAttributeQuotes:true},
         }),
         new webpack.DefinePlugin({
-            "process.env": isDev ? '"development"' : '"production"'
+            "process.env.NODE_ENV": isDev ? '"development"' : '"production"'
         })
     ]
 }
@@ -91,7 +92,7 @@ if(process.env.NODE_ENV === 'development'){
     )
 }else{
     config.entry = {
-        app:path.join(__dirname,'src/index.js'),
+        app:path.join(__dirname,'src/app.js'),
         vendor:['vue']
     };
     config.output.filename = '[name].[chunkhash:8].js';

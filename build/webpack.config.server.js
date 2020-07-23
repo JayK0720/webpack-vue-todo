@@ -1,15 +1,15 @@
 const path = require('path');
 const merge = require('webpack-merge');
-const baseConfig = require('webpack.config.base.js');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const baseConfig = require('./webpack.config.base.js');
 const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const webpack = require('webpack');
 
 let config = merge(baseConfig,{
     target:'node',
-    devtool:'source-map',
-    entry:path.join(__dirname,'../src/server.js'),
+    devtool:'cheap-module-eval-source-map',
+    entry:path.join(__dirname,'../src/entry-server.js'),
     output:{
         libraryTarget:'commonjs2',
         filename:'bundle_server.js',
@@ -19,25 +19,20 @@ let config = merge(baseConfig,{
     module:{
         rules:[
             {
-                test:/\.(scss|css)$/,
-                use:ExtractTextPlugin.extract({
-                    fallback:"style-loader",
-                    use:[
-                        {
-                            loader:'css-loader',
-                            options:{
-                                importLoaders:1
-                            }
-                        },
-                        'sass-loader',
-                        'postcss-loader'
-                    ]
-                })
+                test:/\.scss$/,
+                use:[
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader:'css-loader',
+                        options:{importLoaders:1},
+                    },
+                    "postcss-loader",'sass-loader'
+                ]
             }
         ]
     },
     plugins:[
-        new ExtractTextPlugin('[name].[md5:contenthash:hex:8].css'),
+        new MiniCssExtractPlugin(),
         new webpack.DefinePlugin({
             "process.env.NODE_ENV":JSON.stringify(process.env.NODE_ENV || 'development'),
             "process.env.VUE_ENV":"'server'"

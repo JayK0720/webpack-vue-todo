@@ -1,5 +1,5 @@
 <template>
-    <div class="real-app">
+    <div class="real-server">
         <div class="cover"></div>
         <vHeader/>
         <transition name="fade">
@@ -20,7 +20,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .real-app{
+    .real-server{
         position:fixed;
         left:0;
         right:0;

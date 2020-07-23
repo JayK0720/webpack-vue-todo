@@ -33,7 +33,7 @@ const store = new Vuex.Store({
 
 if(module.hot){
     module.hot.accept(
-        ['./player/index.js'],
+        ['./player/app.js'],
         () => {
             const newPlayer = require('./player/index.js').default;
             store.hotUpdate({

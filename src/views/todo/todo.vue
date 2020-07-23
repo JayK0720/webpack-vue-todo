@@ -72,15 +72,15 @@
             }
         },
         beforeRouteEnter(to,from,next){
-            console.log('todo route before enter invoked');
+            console.log('todo router before enter invoked');
             next();
         },
         beforeRouteUpdate(to,from,next){
-            console.log('todo route before update invoked');
+            console.log('todo router before update invoked');
             next();
         },
         beforeRouteLeave(to,from,next){
-            console.log('todo route before leave invoked');
+            console.log('todo router before leave invoked');
             next();
         }
     }

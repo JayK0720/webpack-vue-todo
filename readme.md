@@ -97,7 +97,7 @@ module.exports = {
     
 ## postcss
     
-    yarn add postcss-loader autofixer --save-dev
+    yarn add postcss-loader autoprefixer --save-dev
 ```js
 // Usage
 // webpack.config.js
@@ -404,7 +404,7 @@ Vue.component('base-checkbox',{
     1. scrollBehavior  这个功能只在支持 history.pushState的浏览器中可用。
 ```js
 const router = new VueRouter({
-    // routes:[...],
+    // router:[...],
     scrollBehavior(to,from,savedPosition){
         if(savedPosition){
             return savedPosition;
@@ -430,6 +430,72 @@ router.afterEach((to,from) => {
     // ...
 })
 ```
+## Vuex
+    
+    Vuex Module
+```js
+const moduleA = {
+    state:() => ({}),
+    mutations:{},
+    actions:{
+        incrementIfOddOnRootSum({state,commit,rootState}){
+            commit('increment');
+        }
+    },
+    getters:{
+        sumWithRootCount(state,getters,rootState){
+            return state.count + rootState.count;
+        }
+    }
+};
+const moduleB = {
+  state: () => ({}),
+    mutations:{},
+    actions:{},
+    getters:{}  
+}
+
+const store = new Vuex.Store({
+    modules:{
+        a:moduleA,
+        b:moduleB
+    }
+})
+```
+    对于模块内部的action，局部状态通过 context.state暴露出来,根结点状态则为context.rootState
+    对于模块内部的getter，根节点状态会作为第三个参数暴露出来:
+
+    Vuex的热重载:
+```js
+const store = {
+    mutations:{},
+    module:{a:moduleA}
+}
+if(module.hot){
+// 使action和mutation 成为可热重载模块
+    module.hot.appcep([
+        './mutations',
+        './modules/moduleA'
+    ],() => {
+        const newMutations = require('./mutations').default;
+        const newModuleA = reqire('./modules/moduleA').default;
+        store.hotUpdate({
+            mutations:newMutations,
+            modules:{
+                a:newModuleA
+            }
+        })  
+    })
+}
+return store;
+```
+    
+## output.libarayTarget
+
+    配置如何暴露library。默认值'var'    
+    
+    libraryTarget:'commonjs2' --- 入口起点的返回值将分配给 module.exports对象。
+    这个名称也意味着模块用于CommonJS环境
 
 ## Vue服务端渲染
 
@@ -441,7 +507,7 @@ router.afterEach((to,from) => {
 // Usage
 // 第 1 步：创建一个 Vue 实例
 const Vue = require('vue')
-const app = new Vue({
+const server = new Vue({
   template: `<div>Hello World</div>`
 })
 
@@ -449,7 +515,7 @@ const app = new Vue({
 const renderer = require('vue-server-renderer').createRenderer();
 
 // 第 3 步：将 Vue 实例渲染为 HTML
-renderer.renderToString(app, (err, html) => {
+renderer.renderToString(server, (err, html) => {
   if (err) throw err
   console.log(html)
   // => <div data-server-rendered="true">Hello World</div>
@@ -474,7 +540,7 @@ renderer.renderToString(app, (err, html) => {
     
     可以通过传入一个 '渲染上下文对象'作为 renderToString函数的第二个参数
 ```js
-// index.js 一个完整的DEMO
+// app.js 一个完整的DEMO
 const Vue = require('vue');
 const server = require('express')();
 const fs = require('fs');
@@ -496,14 +562,14 @@ server.get('/',(req,res) => {
     res.writeHead(200,{
         'Content-Type':"text/html;charset=utf-8"
     })
-    const app = new Vue({
+    const server = new Vue({
         data:{
             url:req.url,
             message:'Hello Vue.js'
         },
         template:'<div><p>你访问的路径是{{url}}</p><p>{{message}}</p></div>'
     });
-    renderer.renderToString(app,context,(err,html) => {
+    renderer.renderToString(server,context,(err,html) => {
         if(err) {
             res.status(500).end("Internal Server Error");
             return;

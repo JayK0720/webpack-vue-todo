@@ -1,1 +1,1 @@
-import './vuex/index.js';
+import './promise/index.js';

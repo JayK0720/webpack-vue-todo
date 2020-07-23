@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build:client",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
-    "practice": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.js"
+    "practice": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.js",
+    "server": "cross-env NODE_ENV=development node server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -46,6 +47,7 @@
     "url-loader": "^4.1.0",
     "vue": "^2.6.11",
     "vue-loader": "^15.9.2",
+    "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.43.0",
     "webpack-clean-plugin": "^0.2.3",

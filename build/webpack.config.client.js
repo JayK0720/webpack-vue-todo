@@ -1,11 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-
 const baseConfig = require('./webpack.config.base.js');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const VueClientPlugin = require('vue-server-renderer/client-plugin');
 let config;
 
 const defaultPlugins = [
@@ -23,7 +22,8 @@ const defaultPlugins = [
                 ? " 'development' "
                 : " 'production' "
         }
-    })
+    }),
+    new VueClientPlugin()
 ]
 
 if(process.env.NODE_ENV === "development"){
@@ -35,7 +35,7 @@ if(process.env.NODE_ENV === "development"){
                     exclude:/node_modules/,
                     use:[
                         {
-                            loader:'style-loader',
+                            loader:'vue-style-loader',
                         },
                         {
                             loader:"css-loader",
@@ -50,7 +50,7 @@ if(process.env.NODE_ENV === "development"){
             ]
         },
         devServer:{
-            port:'9090',
+            port:'9000',
             host:'0.0.0.0',
             overlay:{
                 errors:true // 遇到错误时会更新到页面上
@@ -68,7 +68,7 @@ if(process.env.NODE_ENV === "development"){
 }else{
     config = merge(baseConfig,{
         entry:{
-            app:path.join(__dirname,'../src/index.js'),
+            app:path.join(__dirname,'../src/client-entry.js'),
             vendor:['vue']
         },
         output:{
@@ -79,19 +79,14 @@ if(process.env.NODE_ENV === "development"){
             rules:[
                 {
                     test:/\.scss$/,
-                    use:ExtractTextPlugin.extract({
-                        fallback:'style-loader',
-                        use:[
-                            {
-                                loader:'css-loader',
-                                options:{
-                                    importLoaders:1
-                                },
-                            },
-                            'postcss-loader',
-                            "sass-loader",
-                        ]
-                    })
+                    use:[
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader:'css-loader',
+                            options:{importLoaders:1}
+                        },
+                        'sass-loader','postcss-loader'
+                    ]
                 }
             ]
         },
@@ -107,7 +102,7 @@ if(process.env.NODE_ENV === "development"){
             }
         },
         plugins:defaultPlugins.concat([
-            new ExtractTextPlugin('[name].[md5:contenthash:hex:8].css'),
+            new MiniCssExtractPlugin(),
         ])
     })
 }
