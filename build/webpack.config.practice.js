@@ -3,13 +3,26 @@ const HtmlPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
 
 module.exports = {
-    entry:path.join(__dirname,'../practice/index.js'),
+    entry:{
+        index:['babel-polyfill',path.join(__dirname,'../practice/index.js')]
+    },
+    devtool:'source-map',
     output:{
         filename:'bundle.js',
         path:path.join(__dirname,'../dist')
     },
     module:{
         rules:[
+            {
+                test:/\.(js|jsx)$/,
+                exclude:/node_modules/,
+                use:[{
+                    loader:'babel-loader',
+                    options:{
+                        presets:['@babel/preset-env'],
+                    }
+                }]
+            },
             {
                 test:/\.(png|jpg|jpeg|gif)$/,
                 use:['url-loader']

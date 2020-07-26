@@ -49,6 +49,7 @@ const VueLoaderPlugin = require('vue-loader/bin/plugin');
 ```
     npm run build   // production
     npm run dev  // development
+
     
 
 # configuration
@@ -93,7 +94,22 @@ module.exports = {
     
     install:
         yarn add webpack-dev-middleware --save-dev
+
+## babel-polyfill
+
+    解决 webpack 编译 aysnc/await 编译报错问题
     
+        npm install babel-polyfill --save-dev
+    
+    在webpack入口处配置
+```js
+// webpack.config.js
+{
+    entry:{
+        index:['babel-polyfill',path.join(__dirname,'../practice/index.js')]
+    }
+}
+```    
     
 ## postcss
     
@@ -621,7 +637,31 @@ module.exports = {
     
     
     
+# nodemon
+
+    nodemon is a tool that helps develop node.js based applications by automatically restarting
+    the node application when file changes in the directory are detected.
     
+        npm install -g nodemon
+```json
+//nodemon.json 
+{
+  "restartable": "rs",  // 重启服务命令
+  "ignore": [   // 忽略修改的文件
+    ".git",
+    ".babelrc",
+    ".node_modules/**/node_modules",
+    "build/webpack.config.client.js",
+    "public",
+    "src"
+  ],
+  "verbose": true,
+  "env": {
+    "NODE_ENV": "development",
+  },
+  "ext": "js json ejs"  // 这些文件修改后重启服务
+}
+```    
     
     
     

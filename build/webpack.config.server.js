@@ -2,13 +2,13 @@ const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base.js');
 const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const webpack = require('webpack');
 
 let config = merge(baseConfig,{
     target:'node',
     devtool:'cheap-module-eval-source-map',
+    mode:'development',
     entry:path.join(__dirname,'../src/entry-server.js'),
     output:{
         libraryTarget:'commonjs2',
@@ -21,7 +21,7 @@ let config = merge(baseConfig,{
             {
                 test:/\.scss$/,
                 use:[
-                    MiniCssExtractPlugin.loader,
+                    ExtractCssChunksPlugin.loader,
                     {
                         loader:'css-loader',
                         options:{importLoaders:1},
@@ -32,7 +32,7 @@ let config = merge(baseConfig,{
         ]
     },
     plugins:[
-        new MiniCssExtractPlugin(),
+        new ExtractCssChunksPlugin(),
         new webpack.DefinePlugin({
             "process.env.NODE_ENV":JSON.stringify(process.env.NODE_ENV || 'development'),
             "process.env.VUE_ENV":"'server'"

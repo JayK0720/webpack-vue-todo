@@ -1,1 +1,1 @@
-import './promise/index.js';
+import './async/index.js';

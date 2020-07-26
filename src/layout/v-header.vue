@@ -8,7 +8,7 @@
     .title-wrapper{
         .title{
             text-align:center;
-            font-size:100px;
+            font-size:60px;
             color:rgba(175,47,47,.4);
             font-weight:bold;
             margin:20px;

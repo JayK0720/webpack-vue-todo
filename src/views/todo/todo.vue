@@ -57,7 +57,7 @@
                     id:nextId++,
                     text:event.target.value.trim(),
                     completed:false
-                })
+                });
                 event.target.value = "";
             },
             deleteTodo(id){

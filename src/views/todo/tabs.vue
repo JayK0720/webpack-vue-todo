@@ -1,6 +1,6 @@
 <template>
     <div class="footer-wrapper">
-        <span class="left">{{unFinishedTodoLength}} Items Left</span>
+        <span class="left">{{unFinishedTodoLength}} items left</span>
         <span class="tabs">
             <span
                 v-for="(state,index) in states"
@@ -12,7 +12,7 @@
         <span
             @click="clearCompleted"
             class="clear-completed"
-        >ClearAllCompleted</span>
+        >clear-completed</span>
     </div>
 </template>
 
@@ -29,7 +29,7 @@
         },
         data() {
             return {
-                states:['All','Active','Completed']
+                states:['all','active','completed']
             }
         },
         computed:{
