@@ -1,11 +1,11 @@
 const Vue = require('vue');
 
-module.exports = function createApp(context) {
+module.exports = function createApp(context){
     return new Vue({
         data:{
-            message:'hello,vue.js',
+            message:'hello world',
             url:context.url
         },
-        template:`<p>{{message}},访问路径是{{url}}</p>`
+        template:`<p>{{message}},你访问的路径是{{url}}</p>`
     })
 }

@@ -17,7 +17,7 @@ const defaultPlugins = [
         template:path.join(__dirname,'./template.html')
     }),
     new webpack.DefinePlugin({
-        "process_env":{
+        "process.env":{
             NODE_ENV: process.env.NODE_ENV === "development"
                 ? " 'development' "
                 : " 'production' "

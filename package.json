@@ -9,7 +9,8 @@
     "build": "npm run clean && npm run build:client",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
     "practice": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.js",
-    "server": "nodemon server/index.js"
+    "server": "nodemon server/index.js",
+    "practice:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.client.js"
   },
   "keywords": [],
   "author": "",

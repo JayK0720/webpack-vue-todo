@@ -537,7 +537,10 @@ renderer.renderToString(server, (err, html) => {
   // => <div data-server-rendered="true">Hello World</div>
 })
 ```        
+    renderer.renderToString(app) 不传回调函数的时候返回的是一个Promise。
+        ctx.body = await renderer.renderToString(app);
     
+   
     使用一个页面模版
 ```html
 <!-- template.html -->
