@@ -10,7 +10,9 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
     "practice": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.js",
     "server": "nodemon server/index.js",
-    "practice:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.client.js"
+    "practice:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.client.js",
+    "practice:build": "cross-env NODE_ENV=production webpack --config build/webpack.config.practice.client.js",
+    "clean:practice": "rimraf program"
   },
   "keywords": [],
   "author": "",

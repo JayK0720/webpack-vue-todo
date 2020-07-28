@@ -10,7 +10,7 @@ module.exports = {
     entry:path.join(__dirname,'../practice/program/entry-client.js'),
     output:{
         filename:'bundle.[hash:8].js',
-        path:path.join(__dirname,'../program')
+        path:path.join(__dirname,'../program'),
     },
     module:{
         rules:[{
@@ -74,6 +74,9 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
+    resolve:{
+        extensions:['.vue','.js']
+    },
     devServer:{
         host:'localhost',
         port:"9090",
@@ -82,6 +85,8 @@ module.exports = {
         overlay:{
             errors:true
         },
+        open:true,
+        historyApiFallback:true,
         contentBase:path.join(__dirname,'../program')
     }
 }

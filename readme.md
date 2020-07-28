@@ -161,7 +161,7 @@ module.exports = {
                 {
                     loader:'babel-loader',
                     options:{
-                        "presets":['@babel/env']
+                        "presets":['@babel/preset-env']
                     }
                 }
             ]
@@ -173,6 +173,22 @@ module.exports = {
 // .babelrc  JSON文件
 {
     "presets":["@babel/preset-env"]
+}
+```
+    排除node_modules
+        exclude:/node_modules/ 在应用.js文件的js转译规则(例如 babel-loader)中是蛮常见的。鉴于V15中的推导变化，如果你导入
+        node_modules内的 Vue单文件组件, 它的<script>部分在转译时将会被排除在外。
+        
+        为了确保JS的转译应用到 node_modules的 Vue单文件组件,你需要通过使用一个排除函数将它们加入白名单:
+```js
+// webpack.config.js
+{
+    test:/\.js$/,
+    use:[{loader:'babel-loader'}],
+    exclude:file => (
+        /node_modules/.test(file) &&
+        !/\.vue\.js/.test(file)
+    )
 }
 ```
     
