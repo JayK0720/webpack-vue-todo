@@ -1,6 +1,8 @@
 <template>
     <div class="real-app">
         <h2 class="title">I am app page</h2>
+        <p>{{message}}</p>
+        <button @click="handleChangeMessage">change</button>
         <div class="tab">
             <router-link to="/foo">foo</router-link>
             <router-link to="/bar">bar</router-link>
@@ -12,7 +14,14 @@
 <script>
     export default {
         data() {
-            return {}
+            return {
+                message:'hello welcome my website'
+            }
+        },
+        methods:{
+            handleChangeMessage(){
+                this.message = 'welcome back';
+            }
         }
     }
 </script>

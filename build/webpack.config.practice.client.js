@@ -3,13 +3,16 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueClientPlugin = require('vue-server-renderer/client-plugin');
 
 module.exports = {
     target:'web',
     devtool:"inline-source-map",
-    entry:path.join(__dirname,'../practice/program/entry-client.js'),
+    entry:{
+        client:path.join(__dirname,'../practice/program/entry-client.js')
+    },
     output:{
-        filename:'bundle.[hash:8].js',
+        filename:'[name].bundle.js',
         path:path.join(__dirname,'../program'),
     },
     module:{
@@ -72,7 +75,8 @@ module.exports = {
                     :'"production"'
             }
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new VueClientPlugin()
     ],
     resolve:{
         extensions:['.vue','.js']

@@ -617,6 +617,18 @@ server.listen(8080,() => {
     console.log('server listening at port 8080');
 });
 ```
+
+    vue-server-renderer提供了两种渲染方式:   createRenderer/createBundleRenderer
+```js
+// Usage
+const {createRenderer} = require('vue-server-renderer');
+const renderer = createRenderer({/* 选项 */});
+
+
+const {createBundleRenderer} = require('vue-server-renderer');
+const renderer = createBundleRenderer(serverBundle,{ /* 选项 */ });
+```
+    
 ## 通用代码
 
     1. 默认情况下，在服务端禁用响应式数据。
