@@ -102,7 +102,10 @@ if(process.env.NODE_ENV === "development"){
             }
         },
         plugins:defaultPlugins.concat([
-            new MiniCssExtractPlugin(),
+            new MiniCssExtractPlugin({
+                filename:process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash:8].css',
+                chunkFilename:process.env.NODE_ENV === 'development' ? '[id].css' : '[id].[contenthash:8].css',
+            }),
         ])
     })
 }

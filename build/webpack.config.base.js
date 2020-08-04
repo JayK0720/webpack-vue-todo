@@ -12,7 +12,6 @@ module.exports = {
         rules:[
             {
                 test:/\.js$/,
-                exclude:/node_modules/,
                 use:[
                     {
                         loader:'babel-loader',
@@ -20,7 +19,11 @@ module.exports = {
                             "presets":["@babel/preset-env"]
                         }
                     }
-                ]
+                ],
+                exclude:file => (
+                    /node_modules/.test(file) &&
+                    !/\.vue\.js/.test(file)
+                )
             },
             {
                 test:/\.(png|jpg|jpeg|gif)$/,

@@ -4,6 +4,7 @@ const baseConfig = require('./webpack.config.base.js');
 const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const webpack = require('webpack');
+const isDevelopment = process.env.NODE_ENV === 'development'
 
 let config = merge(baseConfig,{
     target:'node',
@@ -32,7 +33,10 @@ let config = merge(baseConfig,{
         ]
     },
     plugins:[
-        new ExtractCssChunksPlugin(),
+        new ExtractCssChunksPlugin({
+            filename:isDevelopment ? '[name].css' : '[name].[contenthash:8].css',
+            chunkFilename:isDevelopment ? '[id].css' : '[id].[contenthash:8].css'
+        }),
         new webpack.DefinePlugin({
             "process.env.NODE_ENV":JSON.stringify(process.env.NODE_ENV || 'development'),
             "process.env.VUE_ENV":"'server'"

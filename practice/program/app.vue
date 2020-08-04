@@ -1,12 +1,16 @@
 <template>
-    <div class="real-app">
-        <h2 class="title">I am app page</h2>
-        <p>{{message}}</p>
-        <button @click="handleChangeMessage">change</button>
-        <div class="tab">
-            <router-link to="/foo">foo</router-link>
-            <router-link to="/bar">bar</router-link>
+    <div>
+        <p class="title">This is app page</p>
+        <div class="tabs">
+            <router-link tag='div' to="/foo" class="tab-item">
+                <span>Foo</span>
+            </router-link>
+            <router-link tag='div' to="/bar" class="tab-item">
+                <span>Bar</span>
+            </router-link>
         </div>
+        <span>{{message}}</span>
+        <button @click="handleChangeMessage">click me</button>
         <router-view/>
     </div>
 </template>
@@ -15,28 +19,41 @@
     export default {
         data() {
             return {
-                message:'hello welcome my website'
+                message:'hello world'
             }
         },
         methods:{
             handleChangeMessage(){
-                this.message = 'welcome back';
+                this.message = 'hello vue.js'
             }
         }
     }
 </script>
 
 <style scoped lang='scss'>
-    .title{
-        text-align:center;
-        line-height:60px;
-        color:pink;
+    body,html,p{
+        padding: 0;
+        margin: 0;
     }
-    .tab{
+    .title{
+        font-size:20px;
+        color:seagreen;
         text-align:center;
-        a{
-            text-decoration:none;
-            color:skyblue;
+        border-bottom:1px solid #ccc;
+        line-height:60px;
+    }
+    .tabs{
+        display:flex;
+        height:40px;
+        line-height:40px;
+        border-bottom:1px solid #ccc;
+        .tab-item{
+            flex:1;
+            text-align:center;
+            &.active{
+                color:red;
+            }
         }
     }
+
 </style>

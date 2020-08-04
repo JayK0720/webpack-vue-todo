@@ -191,7 +191,7 @@ module.exports = {
     )
 }
 ```
-    
+ 
 ## plugins
 
     DefinePlugin
@@ -291,7 +291,13 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 ```
     配置好后可以这样使用别名：
         import Utility from 'Utilities/utility';    
- 
+    
+    resolve.modules
+        告诉webpack解析模块时应该搜索的目录。
+   
+    modules:[path.resolve(__dirname,'src'),'node_modules']
+    
+    
 ## 外部扩展(externals)
     
     externals配置选项提供了【从输出的bundle中排除依赖】的方法。相反所创建的bundle依赖于那些存在于用户环境
@@ -347,6 +353,30 @@ const clientConfig = {
 }
 
 module.exports = [serverConfig,clientConfig];
+```
+
+## mini-css-extract-plugin
+
+    This plugin extract Css into separate files, It creates a CSS file per JS file which contains CSS.
+    It supports On-Demand-Loading of Css and SourceMaps。
+    
+    install:
+        npm install --save-dev mini-css-extract-plugin
+```js
+// Usage:
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+    module:{
+        rules:[
+            {test:/\.css$/,use:[MiniCssExtractPlugin.loader,'css-loader']}
+        ]
+    },
+    plugins:[new MiniCssExtractPlugin({
+        filename:'[name].css',
+        chunkFilename:'[id].css'
+    })]
+}
 ```
 
 ## Vue options
@@ -693,6 +723,53 @@ module.exports = {
   "ext": "js json ejs"  // 这些文件修改后重启服务
 }
 ```    
+
+  
+# Vue-Loader
+
+    install:
+        应该将vue-loader和vue-template-compiler一起安装。
+    
+    npm install -D vue-loader vue-template-compiler
+    
+    
+    Usage:
+```js
+// webpack.config.js
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+module.exports = {
+    module:{
+        rules:[
+            {
+                test:/\.vue$/,
+                use:['vue-loader']
+            }   
+        ]
+    },
+    plugins:[new VueLoaderPlugin()]
+}
+```
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
