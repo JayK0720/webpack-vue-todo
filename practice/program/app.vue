@@ -1,16 +1,14 @@
 <template>
-    <div>
-        <p class="title">This is app page</p>
-        <div class="tabs">
-            <router-link tag='div' to="/foo" class="tab-item">
+    <div class="real-app">
+        <h4 class="title">This is app page</h4>
+        <ul class="tabs">
+            <router-link tag='li' class='tab-item' to="/foo">
                 <span>Foo</span>
             </router-link>
-            <router-link tag='div' to="/bar" class="tab-item">
+            <router-link tag='li' class='tab-item' to="/bar">
                 <span>Bar</span>
             </router-link>
-        </div>
-        <span>{{message}}</span>
-        <button @click="handleChangeMessage">click me</button>
+        </ul>
         <router-view/>
     </div>
 </template>
@@ -18,42 +16,32 @@
 <script>
     export default {
         data() {
-            return {
-                message:'hello world'
-            }
-        },
-        methods:{
-            handleChangeMessage(){
-                this.message = 'hello vue.js'
-            }
+            return {}
         }
     }
 </script>
 
 <style scoped lang='scss'>
-    body,html,p{
-        padding: 0;
-        margin: 0;
-    }
-    .title{
-        font-size:20px;
-        color:seagreen;
-        text-align:center;
-        border-bottom:1px solid #ccc;
-        line-height:60px;
-    }
-    .tabs{
-        display:flex;
-        height:40px;
+.title{
+    font-size:20px;
+    color:deeppink;
+    text-align:center;
+    line-height:60px;
+    border-bottom:1px solid #c1c1c1;
+}
+.tabs{
+    height:40px;
+    display:flex;
+    .tab-item{
+        flex:1;
         line-height:40px;
-        border-bottom:1px solid #ccc;
-        .tab-item{
-            flex:1;
-            text-align:center;
-            &.active{
-                color:red;
-            }
+        text-align:center;
+        border-bottom:1px solid #c1c1c1;
+        cursor:pointer;
+        &.active{
+            color:red;
+            border-bottom-color:red;
         }
     }
-
+}
 </style>

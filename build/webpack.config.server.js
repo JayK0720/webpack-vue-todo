@@ -2,27 +2,33 @@ const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base.js');
 const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
-const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const isDevelopment = process.env.NODE_ENV === 'development'
 
-let config = merge(baseConfig,{
+module.exports = merge(baseConfig,{
     target:'node',
     devtool:'cheap-module-eval-source-map',
-    mode:'development',
-    entry:path.join(__dirname,'../src/entry-server.js'),
+    entry:{
+        server:path.join(__dirname,'../src/server-entry.js'),
+    },
     output:{
         libraryTarget:'commonjs2',
-        filename:'bundle_server.js',
-        path:path.join(__dirname,'../server-bundle')
+        filename:'[name].bundle.js',
+        path:path.join(__dirname,'../dist')
     },
     externals:Object.keys( require("../package.json")['dependencies'] ),
+    resolve:{
+        extensions:['.vue','.js']
+    },
     module:{
         rules:[
             {
                 test:/\.scss$/,
                 use:[
-                    ExtractCssChunksPlugin.loader,
+                    process.env.NODE_ENV === 'development'
+                        ? 'style-loader'
+                        : MiniCssExtractPlugin.loader,
                     {
                         loader:'css-loader',
                         options:{importLoaders:1},
@@ -33,16 +39,16 @@ let config = merge(baseConfig,{
         ]
     },
     plugins:[
-        new ExtractCssChunksPlugin({
+        new MiniCssExtractPlugin({
             filename:isDevelopment ? '[name].css' : '[name].[contenthash:8].css',
             chunkFilename:isDevelopment ? '[id].css' : '[id].[contenthash:8].css'
         }),
         new webpack.DefinePlugin({
-            "process.env.NODE_ENV":JSON.stringify(process.env.NODE_ENV || 'development'),
-            "process.env.VUE_ENV":"'server'"
+            "process.env":{
+                NODE_ENV:process.env.NODE_ENV === 'development'
+                    ? '"development"'
+                    : ' "production" '
+            },
         }),
-        new VueServerPlugin()
     ]
 });
-
-module.exports = config;

@@ -552,7 +552,7 @@ if(module.hot){
 return store;
 ```
     
-## output.libarayTarget
+## output.libraryTarget
 
     配置如何暴露library。默认值'var'    
     
@@ -560,7 +560,13 @@ return store;
     这个名称也意味着模块用于CommonJS环境
 
 ## Vue服务端渲染
-
+    
+    1. 
+    在纯客户端应用程序(client-only app)中,每个用户都会在他们各自的浏览器中使用新的应用程序实例。对于服务端渲染，我们也
+    希望每个请求都是全新的，独立的应用程序实例，以便不会有交叉请求造成的状态污染。
+    
+    2. 所有的生命周期钩子函数中,只有beforeCreate和created会在服务器端渲染过程中被调用。
+    
     vue-server-renderer
     
     install:
@@ -583,9 +589,28 @@ renderer.renderToString(server, (err, html) => {
   // => <div data-server-rendered="true">Hello World</div>
 })
 ```        
-    renderer.renderToString(app) 不传回调函数的时候返回的是一个Promise。
-        ctx.body = await renderer.renderToString(app);
-    
+    tips: 不传回调函数的时候返回的是一个Promise。
+```js
+router.get('/' ,async ctx => {
+    // 1
+   ctx.body = await new Promise((resolve,reject) => {
+        renderer.renderToString(app,(err,html) => {
+            if(err) return reject(err);
+            resolve(html);
+        });
+    })
+
+    // 2 
+    renderer.renderToString(app).then(html => {
+        ctx.body = html;
+    }).catch(err => {
+        console.log(err);
+    })
+})
+
+
+```
+
    
     使用一个页面模版
 ```html
@@ -658,7 +683,19 @@ const renderer = createRenderer({/* 选项 */});
 const {createBundleRenderer} = require('vue-server-renderer');
 const renderer = createBundleRenderer(serverBundle,{ /* 选项 */ });
 ```
+    serverBundle参数可以是以下之一:
+        1. 绝对路径:指向一个已经构建好的bundle文件(.js或者.json)。 必须以 / 开头才会被识别为文件路径。
+        2. 由 webpack + vue-server-renderer/server-plugin生产的bundle对象。
     
+## Renderer选项
+    
+    1: template
+        为整个页面的HTML提供一个模版。此模版应该包含注释 <!---vue-ssr-outlet->，作为渲染应用程序内容的占位符。
+    2. render context
+        context.head 将会被作为HTML注入到页面的头部里。
+        context.styles: 内联CSS，将以style标签的形式注入到页面头部。
+        context.state; 初始化Vuex store状态，将以window.__INITIAL_STATE__的形式内联到页面。
+
 ## 通用代码
 
     1. 默认情况下，在服务端禁用响应式数据。
@@ -695,7 +732,6 @@ module.exports = {
     生成的默认文件是:
         vue-ssr-server-bundle.json      用于服务器端插件
         vue-ssr-client-manifest.json    用于客户端插件
-    
     
     
 # nodemon

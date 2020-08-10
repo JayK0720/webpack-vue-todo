@@ -5,7 +5,6 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base.js');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueClientPlugin = require('vue-server-renderer/client-plugin');
-let config;
 
 const defaultPlugins = [
     new HtmlPlugin({
@@ -13,7 +12,6 @@ const defaultPlugins = [
         minify:{
             removeAttributeQuotes:true
         },
-        title:"webpack-vue-todo",
         template:path.join(__dirname,'./template.html')
     }),
     new webpack.DefinePlugin({
@@ -28,15 +26,21 @@ const defaultPlugins = [
 
 if(process.env.NODE_ENV === "development"){
     config = merge(baseConfig,{
+        devtool:'source-map',
+        entry:{
+            client:path.join(__dirname,'../src/client-entry.js')
+        },
+        output:{
+            filename:'[name].client.js',
+            path:path.join(__dirname,'../dist')
+        },
         module:{
             rules:[
                 {
                     test:/\.scss/,
                     exclude:/node_modules/,
                     use:[
-                        {
-                            loader:'vue-style-loader',
-                        },
+                        'style-loader',
                         {
                             loader:"css-loader",
                             options:{
@@ -53,7 +57,8 @@ if(process.env.NODE_ENV === "development"){
             port:'9000',
             host:'0.0.0.0',
             overlay:{
-                errors:true // 遇到错误时会更新到页面上
+                errors:true, // 遇到错误时会更新到页面上
+                warnings:true
             },
             contentBase:path.resolve(__dirname,'../dist'),
             compress:true,
@@ -103,8 +108,8 @@ if(process.env.NODE_ENV === "development"){
         },
         plugins:defaultPlugins.concat([
             new MiniCssExtractPlugin({
-                filename:process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash:8].css',
-                chunkFilename:process.env.NODE_ENV === 'development' ? '[id].css' : '[id].[contenthash:8].css',
+                filename:'[name].[contenthash:8].css',
+                chunkFilename:'[id].[contenthash:8].css',
             }),
         ])
     })

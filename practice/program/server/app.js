@@ -46,9 +46,9 @@ const template = fs.readFileSync(
     path.join(__dirname,'../dist/server.bundle.js'),
     'utf-8'
 )*/
-const ServerBundle = require('../dist/vue-ssr-server-bundle.json');
+const ServerBundle = require('./vue-ssr-server-bundle.json');
 
-const clientManifest = require('../dist/vue-ssr-client-manifest.json');
+const clientManifest = require('./vue-ssr-client-manifest.json');
 
 const renderer = VueServerRender.createBundleRenderer(ServerBundle,{
     template,

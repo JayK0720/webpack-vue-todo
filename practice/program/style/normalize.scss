@@ -1,0 +1,17 @@
+body,html,p,ul,ol,h1,h2,h3,h4,h5,h6,input,button,table{
+    padding: 0;
+    margin: 0;
+}
+ul,ol{
+    list-style:none;
+}
+h1,h2,h3,h4,h5,h6{
+    font-size:100%;
+    font-weight:normal;
+}
+em,i{
+    font-style:normal;
+}
+a{
+    text-decoration:none;
+}

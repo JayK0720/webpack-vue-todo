@@ -1,15 +1,25 @@
-const {createApp} = require('./app.js');
+import createApp from './app.js';
 
 export default (context) => {
     return new Promise((resolve,reject) => {
-        const {app,router} = createApp();
+        const {router,app,store} = createApp();
         router.push(context.url);
         router.onReady(() => {
-            const matchedComponents = router.getMatchedComponents();
-            if(!matchedComponents.length) {
+            let matchedComponents = router.getMatchedComponents();
+            if(matchedComponents.length === 0){
                 return reject({code:404})
             }
-            resolve(app);
-        })
+            Promise.all( matchedComponents.map(Component => {
+                if (Component.asyncData) {
+                    return Component.asyncData({
+                        store,
+                        router: router.currentRoute
+                    })
+                }
+            })).then(() => {
+                context.state = store.state;
+                resolve(app);
+            })
+        },reject);
     })
 }

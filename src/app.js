@@ -9,7 +9,7 @@ import './style/index.scss';
 Vue.use(Vuex);
 Vue.use(VueRouter);
 
-export function createApp(){
+export default () => {
     const router = createRouter();
     const store = createStore();
     const app = new Vue({

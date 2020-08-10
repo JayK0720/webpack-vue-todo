@@ -1,20 +1,23 @@
 const path = require('path');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const VueServerPlugin = require('vue-server-renderer/server-plugin');
+const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
 
 module.exports = {
-    target:'node',
+    target:"node",
     entry:{
         server:path.join(__dirname,'../src/server-entry.js')
     },
     output:{
         filename:'[name].bundle.js',
-        libraryTarget:'commonjs2',
-        path:path.join(__dirname,'../dist')
+        path:path.join(__dirname,'../dist'),
+        libraryTarget:'commonjs2'
     },
-    externals:Object.keys( require(path.join(__dirname,'../package.json')).dependencies ),
+    resolve:{
+        extensions:['.js','.vue'],
+        modules:[path.join(__dirname,'src'),'node_modules']
+    },
+    externals:Object.keys( require('../package.json')['dependencies'] ),
     module:{
         rules:[
             {
@@ -22,24 +25,7 @@ module.exports = {
                 use:['vue-loader']
             },
             {
-                test:/\.(jpg|jpeg|png|svg|gif)$/,
-                use:[
-                    {
-                        loader:'file-loader',
-                        options:{
-                            filename:'[name].[ext]'
-                        }
-                    },
-                    {
-                        loader:'url-loader',
-                        options:{
-                            limit:538*1024,
-                        }
-                    }
-                ]
-            },
-            {
-                test:/\.js$/,
+                test:/\.(js|jsx)$/,
                 use:[
                     {
                         loader:'babel-loader',
@@ -50,14 +36,14 @@ module.exports = {
                 ],
                 exclude:file => (
                     /node_modules/.test(file) &&
-                    !/\.vue\.js/.test(file)
+                    !/\.js\.vue/.test(file)
                 )
             },
             {
                 test:/\.scss$/,
                 use:[
                     process.env.NODE_ENV === 'development'
-                        ? 'vue-style-loader'
+                        ? 'style-loader'
                         : MiniCssExtractPlugin.loader,
                     {
                         loader:'css-loader',
@@ -69,20 +55,11 @@ module.exports = {
         ]
     },
     plugins:[
-        new webpack.DefinePlugin({
-            'process.env':{
-                NODE_ENV:process.env.NODE_ENV === 'development'
-                    ? ' "development" '
-                    : ' "production" '
-            }
-        }),
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
-            filename:'[name].css'
+            filename:'[name].css',
+            chunkFilename:'[id].css'
         }),
         new VueServerPlugin()
-    ],
-    resolve:{
-        extensions:['.js','.vue']
-    }
+    ]
 }

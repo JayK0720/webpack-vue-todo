@@ -1,13 +1,13 @@
 const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const VueClientPlugin = require('vue-server-renderer/client-plugin');
-
-const isDevelopment = process.env.NODE_ENV === 'development'
+const webpack = require('webpack');
+const VueClientPlugin = require('vue-server-renderer/client-plugin.js');
 
 module.exports = {
+    target:'web',
+    devtool:'source-map',
     entry:{
         client:path.join(__dirname,'../src/client-entry.js')
     },
@@ -15,21 +15,46 @@ module.exports = {
         filename:'[name].bundle.js',
         path:path.join(__dirname,'../dist')
     },
+    resolve:{
+        extensions:['.vue','.js'],
+        modules:[path.join(__dirname,'../src'),'node_modules'],
+        alias:{
+            'imgs':path.resolve(__dirname,'../src/imgs')
+        }
+    },
     module:{
         rules:[
             {
-                test:/\.vue$/,
-                use:['vue-loader']
+                test:/\.js$/,
+                use:[
+                    {
+                        loader:"babel-loader",
+                        options:{
+                            'presets':['@babel/preset-env']
+                        }
+                    }
+                ],
+                exclude:file => (
+                    /node_modules/.test(file) &&
+                    !/\.vue\.js/.test(file)
+                )
+            },
+            {
+                test:/\.vue/,
+                use:{
+                    loader:'vue-loader',
+                    options:{
+                        extractCSS:process.env.NODE_ENV === 'production'
+                    }
+                }
             },
             {
                 test:/\.scss$/,
                 use:[
-                    {
-                        loader:isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-                        options:{
-                            hmr:isDevelopment
-                        }
-                    },
+                    process.env.NODE_ENV === 'development'
+                        ? 'style-loader'
+                        : MiniCssExtractPlugin.loader
+                    ,
                     {
                         loader:'css-loader',
                         options:{
@@ -37,94 +62,63 @@ module.exports = {
                             sourceMap:true
                         }
                     },
-                    {
-                        loader:'sass-loader',
-                        options:{
-                            sourceMap:true
-                        }
-                    }
-                    ,'postcss-loader'
+                    'postcss-loader','sass-loader'
                 ]
             },
             {
-                test:/\.(js|jsx)$/,
+                test:/\.(jpg|jpeg|png|gif|svg)$/,
                 use:[
                     {
-                        loader:'babel-loader',
+                        loader:'url-loader',
                         options:{
-                            'presets':['@babel/preset-env']
-                        }
-                    }
-                ],
-                // 为了确保js的转译应用到node_modules的Vue单文件组件,需要通过使用一个排除函数将它们加入白名单
-                exclude:file => (
-                    /node_modules/.test(file) &&
-                    !/\.vue\.js/.test(file)
-                )
-            },
-            {
-                test:/\.(jpg|jpeg|png|svg|gif)$/,
-                use:[
-                    {
-                        loader:'file-loader',
-                        options:{
-                            filename:'[name].[ext]',
+                            limit:1024*20,
                             esModule:false
                         }
                     },
                     {
-                        loader:'url-loader',
+                        loader:'file-loader',
                         options:{
-                            limit:538*1024
+                            esModule:false,
+                            name:'[name].[ext]'
                         }
                     }
                 ]
             },
             {
-                test:/\.html$/,
+                test:/\.(html|htm)$/,
                 use:['html-loader']
             }
         ]
     },
     plugins:[
-        new MiniCssExtractPlugin({
-            filename:isDevelopment ? '[name].css' : '[name].[contenthash:8].css',
-            chunkFilename:isDevelopment ? '[id].css' : '[id].[contenthash:8].css'
-        }),
+        new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-            hash:true,
-            title:'vue-ssr-demo',
             filename:'index.html',
-            template:path.join(__dirname,'../src/index.template.html')
+            template:path.join(__dirname,'./index.template.html'),
+            hash:true,
+            minify:{
+                removeAttributeQuotes:true
+            },
+            title:'vue-server-render-demo'
+        }),
+        new MiniCssExtractPlugin({
+            filename:'[name].css',
+            chunkFilename:'[id].css'
         }),
         new VueLoaderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.DefinePlugin({
-            'process.env':{
-                NODE_ENV: process.env.NODE_ENV === 'development'
-                    ? ' "development" '
-                    : ' "production" '
-            }
-        }),
         new VueClientPlugin()
     ],
-    resolve:{
-        extensions:['.vue','.js'],
-        modules:[path.resolve(__dirname,'src'),'node_modules']
-    },
     devServer:{
-        host:'localhost',
-        port:'3000',
+        host:'0.0.0.0',
+        port:"3000",
         hot:true,
         open:true,
-        historyApiFallback:true,
-        contentBase:path.join(__dirname,'../dist'),
-        compress:true,
         overlay:{
             errors:true,
             warnings:true
-        }
+        },
+        contentBase:path.join(__dirname,'../dist'),
+        compress:true,
+        historyApiFallback:true
     }
 }
-
-
