@@ -106,7 +106,7 @@ module.exports = {
 // webpack.config.js
 {
     entry:{
-        index:['babel-polyfill',path.join(__dirname,'../practice/index.js')]
+        index:['babel-polyfill',path.join(__dirname,'../practice/server.js')]
     }
 }
 ```    
@@ -607,8 +607,6 @@ router.get('/' ,async ctx => {
         console.log(err);
     })
 })
-
-
 ```
 
    

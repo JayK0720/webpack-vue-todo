@@ -26,6 +26,12 @@ module.exports = {
                             limit:1024,
                             name:'[name].[ext]'
                         }
+                    },
+                    {
+                        loader:'file-loader',
+                        options:{
+                            name:'[name].[ext]'
+                        }
                     }
                 ]
             },

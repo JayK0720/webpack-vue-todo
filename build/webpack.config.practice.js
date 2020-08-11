@@ -4,7 +4,7 @@ const webpack = require("webpack");
 
 module.exports = {
     entry:{
-        index:['babel-polyfill',path.join(__dirname,'../practice/index.js')]
+        index:['babel-polyfill',path.join(__dirname,'../practice/server.js')]
     },
     devtool:'source-map',
     output:{

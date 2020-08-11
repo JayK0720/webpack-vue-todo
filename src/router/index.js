@@ -1,7 +1,9 @@
+import Vue from 'vue';
 import VueRouter from 'vue-router'
+Vue.use(VueRouter);
 
 export function createRouter(){
-    return new VueRouter({
+    const router = new VueRouter({
         mode:'history',
         linkExactActiveClass:'active',
         routes:[
@@ -25,6 +27,7 @@ export function createRouter(){
             }
         }
     });
+    return router;
 }
 
 

@@ -1,34 +1,83 @@
 const Koa = require('koa');
-const VueServerRender = require('vue-server-renderer');
 const router = require('koa-router')();
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 const app = new Koa();
+const static = require('koa-static');
+const VueServerRender = require('vue-server-renderer');
 
-const template = fs.readFileSync( path.join(__dirname,'./template.html'), 'utf-8' );
-const ServerBundle = fs.readFileSync(
-    path.join(__dirname,'../dist/server.bundle.js'),
+const template = fs.readFileSync(
+    path.join(__dirname,'./template.html'),
     'utf-8'
 )
 
-const renderer = VueServerRender.createBundleRenderer(ServerBundle,{
+// createRenderer
+/*const renderer = VueServerRender.createRenderer({
     template
 })
 
 router.get('/', async ctx => {
+    const vm = require('../dist/server.bundle.js').default();
     ctx.body = await new Promise((resolve,reject) => {
-        renderer.renderToString((err,html) => {
+        renderer.renderToString(vm,(err,html) => {
             if(err) {
                 return reject(err);
             }
-            console.log(`${html}`);
             resolve(html);
         })
     })
+});*/
+
+
+// createBundleRenderer
+/*const ServerBundle = fs.readFileSync(
+    path.join(__dirname,'../dist/server.bundle.js'),
+    'utf-8'
+)
+const renderer = VueServerRender.createBundleRenderer(ServerBundle,{
+    template
+});
+router.get('/', async ctx => {
+    ctx.body = await new Promise((resolve,reject) => {
+        renderer.renderToString((err,html) => {
+            if(err) return reject(err);
+            resolve(html)
+        })
+    })
+})*/
+
+
+// vue-server-renderer/server-plugin
+app.use(
+    static(path.join(__dirname,'../dist'))
+)
+
+const VueServerBundle = require(path.join(__dirname,'../dist/vue-ssr-server-bundle.json'));
+const clientManifest = require(path.join(__dirname,'../dist/vue-ssr-client-manifest.json'));
+
+const renderer = VueServerRender.createBundleRenderer(VueServerBundle,{
+    template,
+    clientManifest
 });
 
-app.use(router.routes()).use(router.allowedMethods());
+router.get('/', async ctx => {
+    const context = {url:ctx.url}
+    ctx.body = await new Promise((resolve,reject) => {
+        renderer.renderToString(context,(err,html) => {
+            if(err){
+                return reject(err);
+            }
+            resolve(html);
+        })
+    })
+})
 
-app.listen(4000, () => {
-    console.log('app starting at port 4000');
+app.use(
+    router.routes()
+).use(
+    router.allowedMethods()
+)
+
+app.listen(3000,() => {
+    console.log('app starting at port 3000')
 })

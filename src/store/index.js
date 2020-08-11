@@ -1,9 +1,12 @@
 import Vuex from 'vuex';
+import Vue from "vue";
+Vue.use(Vuex);
 
 export function createStore(){
-    return new Vuex.Store({
+    const store = new Vuex.Store({
         state:{
             count:0
         }
-    })
+    });
+    return store;
 }

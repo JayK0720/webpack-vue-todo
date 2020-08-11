@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 module.exports = merge(baseConfig,{
+    mode:'development',
     target:'node',
     devtool:'cheap-module-eval-source-map',
     entry:{
@@ -19,7 +20,8 @@ module.exports = merge(baseConfig,{
     },
     externals:Object.keys( require("../package.json")['dependencies'] ),
     resolve:{
-        extensions:['.vue','.js']
+        extensions:['.vue','.js'],
+        modules:[path.resolve('src'),'node_modules']
     },
     module:{
         rules:[
@@ -27,7 +29,7 @@ module.exports = merge(baseConfig,{
                 test:/\.scss$/,
                 use:[
                     process.env.NODE_ENV === 'development'
-                        ? 'style-loader'
+                        ? 'vue-style-loader'
                         : MiniCssExtractPlugin.loader,
                     {
                         loader:'css-loader',
@@ -47,8 +49,10 @@ module.exports = merge(baseConfig,{
             "process.env":{
                 NODE_ENV:process.env.NODE_ENV === 'development'
                     ? '"development"'
-                    : ' "production" '
+                    : ' "production" ',
+                VUE_ENV: '"server"'
             },
         }),
+        new VueServerPlugin()
     ]
 });
