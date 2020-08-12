@@ -48,25 +48,23 @@ router.get('/', async ctx => {
 
 
 // vue-server-renderer/server-plugin
-app.use(
-    static(path.join(__dirname,'../dist'))
-)
+const clientManifest = require('../dist/vue-ssr-client-manifest.json');
+const ServerBundle = require('../dist/vue-ssr-server-bundle.json');
 
-const VueServerBundle = require(path.join(__dirname,'../dist/vue-ssr-server-bundle.json'));
-const clientManifest = require(path.join(__dirname,'../dist/vue-ssr-client-manifest.json'));
-
-const renderer = VueServerRender.createBundleRenderer(VueServerBundle,{
+const renderer = VueServerRender.createBundleRenderer(ServerBundle,{
     template,
     clientManifest
-});
+})
+
+app.use( static(
+    path.join(__dirname,'../dist')
+))
 
 router.get('/', async ctx => {
-    const context = {url:ctx.url}
+    const context = {url:ctx.url};
     ctx.body = await new Promise((resolve,reject) => {
         renderer.renderToString(context,(err,html) => {
-            if(err){
-                return reject(err);
-            }
+            if(err) return reject(err);
             resolve(html);
         })
     })

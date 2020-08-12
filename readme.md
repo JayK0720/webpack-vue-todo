@@ -693,6 +693,41 @@ const renderer = createBundleRenderer(serverBundle,{ /* 选项 */ });
         context.head 将会被作为HTML注入到页面的头部里。
         context.styles: 内联CSS，将以style标签的形式注入到页面头部。
         context.state; 初始化Vuex store状态，将以window.__INITIAL_STATE__的形式内联到页面。
+        
+    3. clientManifest(客户端构建清单)。它可以自动推断和注入资源预加载/数据预取指令。以及css链接/script标签到所渲染的HTML。
+```html
+<html>
+  <head>
+    <!-- 用于当前渲染的 chunk 会被资源预加载(preload) -->
+    <link rel="preload" href="/manifest.js" as="script">
+    <link rel="preload" href="/main.js" as="script">
+    <link rel="preload" href="/0.js" as="script">
+    <!-- 未用到的异步 chunk 会被数据预取(prefetch)（次要优先级） -->
+    <link rel="prefetch" href="/1.js" as="script">
+  </head>
+  <body>
+    <!-- 应用程序内容 -->
+    <div data-server-rendered="true"><div>async</div></div>
+    <!-- manifest chunk 优先 -->
+    <script src="/manifest.js"></script>
+    <!-- 在主 chunk 之前注入异步 chunk -->
+    <script src="/0.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
+```
+
+## 手动资源注入
+
+    默认情况下,当提供template渲染选项时,资源注入是自动执行的。但有时可以在创建renderer手动执行资源注入。
+    传入 inject:false。
+    在renderToString回调函数中,你传入的context对象会暴露以下方法:
+        1. context.renderStyles()
+            返回内联<style>标签包含所有关键CSS(critical CSS),其中关键CSS是在要用到的.vue组件的渲染过程中收集的。
+            如果提供了clientManifest，返回的字符串中，也将包含着<link rel='stylesheet'>标签内由webpack输出的CSS文件。
+        2. context.renderScripts()
+            需要clientManifest。 返回引导客户端应用程序所需的<script>标签。当在应用程序代码中使用异步代码分割时,此方法
+            将智能地正确的推断客户需要引入的那些异步chunk。
 
 ## 通用代码
 
@@ -716,7 +751,7 @@ module.exports = {
     },
     externals:Object.keys( require('./package.json')['dependencies'] ),
     plugins:[
-        new VueServerPlugin()``
+        new VueServerPlugin()
     ]
 }
 ```
@@ -730,7 +765,6 @@ module.exports = {
     生成的默认文件是:
         vue-ssr-server-bundle.json      用于服务器端插件
         vue-ssr-client-manifest.json    用于客户端插件
-    
     
 # nodemon
 
@@ -757,15 +791,25 @@ module.exports = {
   "ext": "js json ejs"  // 这些文件修改后重启服务
 }
 ```    
-
-  
+# concurrently
+    
+    一个命令 同时启动两个服务
+        
+        install:
+            yarn add concurrently -D
+```json
+{
+    "dev:client":"cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
+    "dev:server": "nodemon server/index.js",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\""
+}
+```
 # Vue-Loader
 
     install:
         应该将vue-loader和vue-template-compiler一起安装。
     
     npm install -D vue-loader vue-template-compiler
-    
     
     Usage:
 ```js

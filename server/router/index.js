@@ -1,23 +1,18 @@
 const router = require('koa-router')();
-const MemoryFs = require('memory-fs');
 const webpack = require('webpack');
-const VueServerRender = require('vue-server-renderer');
+const MemoryFileSystem = require('memory-fs');
 const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
-const ejs = require('ejs');
-
+const path = require('path');
+const VueServerRender = require('vue-server-renderer');
 const config = require('../../build/webpack.config.server.js');
-
 const compiler = webpack(config);
-const mfs = new MemoryFs();
+const mfs = new MemoryFileSystem();
 compiler.outputFileSystem = mfs;
 
 let bundle;
 compiler.watch({},(err,stats) => {
-    if(err) {
-        throw err;
-    }
+    if(err) throw err;
     stats = stats.toJson();
     stats.errors.forEach((error) => {console.log(error)});
     stats.warnings.forEach((warning) => {console.log(warning)});
@@ -26,61 +21,36 @@ compiler.watch({},(err,stats) => {
         config.output.path,
         'vue-ssr-server-bundle.json'
     );
-    bundle = JSON.parse(mfs.readFileSync(bundlePath,'utf-8'));
+    bundle = JSON.parse( mfs.readFileSync(bundlePath,'utf-8') );
+    console.log('new bundle generated');
 });
 
-
-router.get('/', async ctx => {
-    ctx.headers['Content-Type'] = 'text/html';
-    const context = {url:ctx.url};
+router.get('/', async (ctx) => {
     if(!bundle) {
-        ctx.body = 'please wait a moment!'
+        ctx.body = 'please wait a moment!';
+        return;
     }
+    const context = {url:ctx.url};
+    ctx.headers['Content-Type'] = 'text/html';
     const template = fs.readFileSync(
-        path.resolve(__dirname,'../server.template.ejs'),
+        path.join(__dirname,'../template.html'),
         'utf-8'
     );
-    const clientManifest = await axios.get('http://127.0.0.1:9000/vue-ssr-client-manifest.json')
+    const response = await axios.get('http://127.0.0.1:9000/vue-ssr-client-manifest.json');
+    const clientManifest = response.data;
     const renderer = VueServerRender.createBundleRenderer(bundle,{
         template,
-        inject:false,
-        clientManifest
+        clientManifest,
     });
-/*    ctx.body = await new Promise((resolve,reject) => {
-        renderer.renderToString(context,(err,appString) => {
+    ctx.body = await new Promise((resolve,reject) => {
+        renderer.renderToString(context,(err,html) => {
             if(err) return reject(err);
-            const html = ejs.render(template,{
-                appString,
-                style:context.renderStyles(),
-                scripts:context.renderScripts()
-            });
-            console.log(`${html}`);
             resolve(html);
         })
-    })*/
-    try{
-        const appString = await renderer.renderToString(context);
-        const html = ejs.render(template,{
-            appString,
-            style:context.renderStyles(),
-            scripts:context.renderScripts()
-        });
-        ctx.body = html;
-    }catch(err){
-        console.log('render err:',err);
-    }
+    });
 });
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
 
 
 

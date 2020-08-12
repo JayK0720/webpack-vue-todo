@@ -42,9 +42,7 @@ module.exports = {
             {
                 test:/\.scss$/,
                 use:[
-                    process.env.NODE_ENV === 'development'
-                        ? 'style-loader'
-                        : MiniCssExtractPlugin.loader,
+                    'vue-style-loader',
                     {
                         loader:'css-loader',
                         options:{importLoaders:1}

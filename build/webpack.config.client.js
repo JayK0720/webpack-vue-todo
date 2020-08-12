@@ -28,11 +28,12 @@ if(process.env.NODE_ENV === "development"){
     config = merge(baseConfig,{
         devtool:'source-map',
         entry:{
-            client:path.join(__dirname,'../src/client-entry.js')
+            client:path.resolve(__dirname,'../src/client-entry.js')
         },
         output:{
-            filename:'[name].client.js',
-            path:path.join(__dirname,'../dist')
+            filename:'[name].bundle.js',
+            path:path.resolve(__dirname,'../dist'),
+            publicPath:'http://127.0.0.1:9000/'
         },
         module:{
             rules:[
@@ -73,12 +74,12 @@ if(process.env.NODE_ENV === "development"){
 }else{
     config = merge(baseConfig,{
         entry:{
-            app:path.join(__dirname,'../src/client-entry.js'),
+            app:path.resolve(__dirname,'../src/client-entry.js'),
             vendor:['vue']
         },
         output:{
             filename:'[name].[chunkhash:8].js',
-            path:path.join(__dirname,'../dist')
+            path:path.resolve(__dirname,'../dist')
         },
         module:{
             rules:[
