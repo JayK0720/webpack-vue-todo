@@ -5,6 +5,7 @@
         <transition name="fade">
             <router-view/>
         </transition>
+        <Notification content="hello world" btn="X"/>
     </div>
 </template>
 
@@ -12,6 +13,28 @@
     import vHeader from './layout/v-header.vue';
     import vFooter from './layout/v-footer.vue';
     export default {
+        data(){
+            return {
+                title:'App Page',
+                keywords:'vue todo vue-meta',
+                description:'this is a todo-list app page'
+            }
+        },
+        metaInfo(){
+            return {
+                title:this.title,
+                meta:[
+                    {
+                        name:'keywords',
+                        content:this.keywords
+                    },
+                    {
+                        meta:'description',
+                        content:this.description
+                    }
+                ]
+            }
+        },
         components:{
             vHeader,
             vFooter,

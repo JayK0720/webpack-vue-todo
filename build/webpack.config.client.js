@@ -5,7 +5,6 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base.js');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueClientPlugin = require('vue-server-renderer/client-plugin');
-
 const defaultPlugins = [
     new HtmlPlugin({
         hash:true,
@@ -23,7 +22,6 @@ const defaultPlugins = [
     }),
     new VueClientPlugin()
 ]
-
 if(process.env.NODE_ENV === "development"){
     config = merge(baseConfig,{
         devtool:'source-map',
@@ -33,7 +31,7 @@ if(process.env.NODE_ENV === "development"){
         output:{
             filename:'[name].bundle.js',
             path:path.resolve(__dirname,'../dist'),
-            publicPath:'http://127.0.0.1:9000/'
+            publicPath:'http://127.0.0.1:9000/assets'
         },
         module:{
             rules:[
@@ -65,7 +63,10 @@ if(process.env.NODE_ENV === "development"){
             compress:true,
             hot:true,  // 启动热更新
             open:true,// 会自动打开浏览器
-            historyApiFallback:true
+            historyApiFallback:{
+                index:'/assets/index.html'
+            },
+            headers:{"Access-Control-Allow-Origin":"*"}
         },
         plugins:defaultPlugins.concat([
             new webpack.HotModuleReplacementPlugin()
@@ -73,13 +74,15 @@ if(process.env.NODE_ENV === "development"){
     })
 }else{
     config = merge(baseConfig,{
+        mode:"production",
         entry:{
             app:path.resolve(__dirname,'../src/client-entry.js'),
             vendor:['vue']
         },
         output:{
             filename:'[name].[chunkhash:8].js',
-            path:path.resolve(__dirname,'../dist')
+            path:path.resolve(__dirname,'../assets'),
+            publicPath:'/assets/'
         },
         module:{
             rules:[

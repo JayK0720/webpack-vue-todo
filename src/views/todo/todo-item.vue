@@ -7,7 +7,10 @@
                 class="toggle-todo"
                 @click="toggleTodo"
             >
-            <p class="text">{{todo.text}}</p>
+            <p class="text">
+                <span class="gesture">{{todo.completed ? '👌' : '👋'}}</span>
+                <span>{{todo.text}}</span>
+            </p>
         </div>
         <span
             class="delete-btn"
@@ -49,8 +52,14 @@
             display:flex;
             align-items:center;
             .text{
-                padding-left:10px;
+                padding-left:15px;
+                font-size:18px;
+                color:#616161;
                 flex:1;
+            }
+            .gesture{
+                padding-right:5px;
+                font-size:12px;
             }
         }
         &.completed{
@@ -66,6 +75,7 @@
             .delete-btn{
                 display:block;
                 cursor:pointer;
+                color:rgba(175, 47, 47, 0.4);
             }
         }
     }

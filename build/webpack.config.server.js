@@ -5,8 +5,8 @@ const VueServerPlugin = require('vue-server-renderer/server-plugin.js');
 const webpack = require('webpack');
 
 module.exports = merge(baseConfig,{
-    mode:'development',
     target:'node',
+    mode:"production",
     devtool:'cheap-module-eval-source-map',
     entry:{
         server:path.resolve(__dirname,'../src/server-entry.js'),

@@ -36,7 +36,7 @@ router.get('/', async (ctx) => {
         path.join(__dirname,'../template.html'),
         'utf-8'
     );
-    const response = await axios.get('http://127.0.0.1:9000/vue-ssr-client-manifest.json');
+    const response = await axios.get('http://127.0.0.1:9000/assets/vue-ssr-client-manifest.json');
     const clientManifest = response.data;
     const renderer = VueServerRender.createBundleRenderer(bundle,{
         template,

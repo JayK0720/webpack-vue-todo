@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{27:function(n,t,e){"use strict";e.r(t);var o={metaInfo:{title:"Login Page"},data:function(){return{}},mounted:function(){console.log(this.$route)}},c=e(1),i=Object(c.a)(o,(function(){var n=this.$createElement;return(this._self._c||n)("div",[this._v("\n    这个是登陆页面\n")])}),[],!1,null,"1c6c735c",null);t.default=i.exports}}]);

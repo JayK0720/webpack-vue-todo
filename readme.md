@@ -800,7 +800,7 @@ module.exports = {
 ```json
 {
     "dev:client":"cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
-    "dev:server": "nodemon server/index.js",
+    "dev:server": "nodemon server/dev.ssr.js",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\""
 }
 ```

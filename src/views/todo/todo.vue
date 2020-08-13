@@ -32,6 +32,9 @@
 
     let nextId = 0;
     export default {
+        metaInfo:{
+            title:'Todo Page'
+        },
         data() {
             return {
                 todos:[],
@@ -91,7 +94,8 @@
         margin:0 auto;
         width:600px;
         box-shadow:0 0 5px #666;
-        background-color:#fff;
+        background-color:#Fefefe;
+        border-radius:4px;
         .input-wrapper{
             height:50px;
             width:600px;
@@ -104,7 +108,8 @@
             outline:none;
             text-indent:1em;
             font-size:20px;
-            color:#212121;
+            color:#313131;
+            background-color:#Fefefe;
         }
     }
 </style>

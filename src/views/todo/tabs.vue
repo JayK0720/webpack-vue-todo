@@ -55,7 +55,7 @@
         height:50px;
         justify-content:space-between;
         align-items:center;
-        font-size:14px;
+        font-size:16px;
         color:#717171;
         .tabs{
             .tab-item{
@@ -63,6 +63,7 @@
                 cursor:pointer;
                 &.active{
                     color:darkred;
+                    font-weight:bold;
                 }
             }
         }

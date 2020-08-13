@@ -1,11 +1,10 @@
 const Koa = require('koa');
 const app = new Koa();
+const staticRouter = require('./router/static.js');
 const isDevelopment = process.env.NODE_ENV === 'development';
-const pageRouter = require('./router/index.js');
-
 app.use(async (ctx,next) => {
     try {
-        console.log(`request path: ${ctx.url}`);
+        console.log(`request url: ${ctx.path}`);
         await next();
     }catch(err){
         console.log(err);
@@ -18,6 +17,15 @@ app.use(async (ctx,next) => {
         }
     }
 });
+
+app.use(staticRouter.routes()).use(staticRouter.allowedMethods());
+
+let pageRouter;
+if(isDevelopment){
+    pageRouter = require('./router/dev.ssr.js');
+}else{
+    pageRouter = require('./router/prod.ssr.js');
+}
 
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
 
