@@ -24,12 +24,12 @@ const defaultPlugins = [
 ]
 if(process.env.NODE_ENV === "development"){
     config = merge(baseConfig,{
-        devtool:'source-map',
+        devtool:'cheap-module-eval-source-map',
         entry:{
             client:path.resolve(__dirname,'../src/client-entry.js')
         },
         output:{
-            filename:'[name].bundle.js',
+            filename:'[name].bundle.[hash:8].js',
             path:path.resolve(__dirname,'../dist'),
             publicPath:'http://127.0.0.1:9000/assets'
         },
@@ -46,7 +46,10 @@ if(process.env.NODE_ENV === "development"){
                                 importLoaders:1
                             }
                         },
-                        'postcss-loader',
+                        {
+                            loader:'postcss-loader',
+                            options:{sourceMap:true}
+                        },
                         'sass-loader'
                     ]
                 }
@@ -82,7 +85,6 @@ if(process.env.NODE_ENV === "development"){
         output:{
             filename:'[name].[chunkhash:8].js',
             path:path.resolve(__dirname,'../assets'),
-            publicPath:'/assets/'
         },
         module:{
             rules:[

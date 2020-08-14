@@ -1,1 +1,1 @@
-import './async/index.js';
+import './extend/index.js';

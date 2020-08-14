@@ -1,10 +1,15 @@
 const Koa = require('koa');
 const app = new Koa();
-const staticRouter = require('./router/static.js');
+const static = require('koa-static');
+const path = require('path');
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+app.use(static(
+    path.resolve(__dirname,'../assets')
+));
+
 app.use(async (ctx,next) => {
     try {
-        console.log(`request url: ${ctx.path}`);
         await next();
     }catch(err){
         console.log(err);
@@ -17,17 +22,15 @@ app.use(async (ctx,next) => {
         }
     }
 });
-
-app.use(staticRouter.routes()).use(staticRouter.allowedMethods());
-
 let pageRouter;
+
 if(isDevelopment){
     pageRouter = require('./router/dev.ssr.js');
 }else{
     pageRouter = require('./router/prod.ssr.js');
 }
 
-app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
+app.use(pageRouter.routes()).use(pageRouter.allowedMethods());
 
 app.listen(3000,() => {
     console.log('app starting at port 3000');

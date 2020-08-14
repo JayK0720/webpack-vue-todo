@@ -12,10 +12,8 @@
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "practice": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.js",
-    "practice:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.practice.client.js",
     "practice:build": "cross-env NODE_ENV=production webpack --config build/webpack.config.practice.client.js",
-    "clean:practice": "rimraf program",
-    "practice:server": "cross-env NODE_ENV=development webpack --config build/webpack.config.practice.server.js"
+    "clean:practice": "rimraf program"
   },
   "keywords": [],
   "author": "",

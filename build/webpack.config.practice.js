@@ -1,10 +1,11 @@
 const path = require('path');
 const HtmlPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
     entry:{
-        index:['babel-polyfill',path.join(__dirname,'../practice/server.js')]
+        index:['babel-polyfill',path.join(__dirname,'../practice/index.js')]
     },
     devtool:'source-map',
     output:{
@@ -37,12 +38,8 @@ module.exports = {
                             importLoaders:1
                         }
                     },
-                    'postcss-loader'
+                    'postcss-loader','sass-loader'
                 ]
-            },
-            {
-                test:/\.scss$/,
-                use:'sass-loader'
             },
             {
                 test:/\.vue$/,
@@ -60,7 +57,8 @@ module.exports = {
                 NODE_ENV:"'development'"
             }
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new VueLoaderPlugin()
     ],
     resolve:{
         //  创建 import或require的别名，来确保模块引入变得更简单。
