@@ -5,13 +5,14 @@
         <transition name="fade">
             <router-view/>
         </transition>
-        <Notification content="hello world" btn="X"/>
+        <button @click="handleNotification">add</button>
     </div>
 </template>
 
 <script>
     import vHeader from './layout/v-header.vue';
     import vFooter from './layout/v-footer.vue';
+    import {notification} from './components/notification/index.js';
     export default {
         data(){
             return {
@@ -38,6 +39,17 @@
         components:{
             vHeader,
             vFooter,
+        },
+        methods:{
+            handleNotification(){
+                notification({
+                    content:'hello ',
+                    cancel:'关闭',
+                    handleCancel(){
+                        console.log('关闭');
+                    }
+                })
+            }
         },
     }
 </script>

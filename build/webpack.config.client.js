@@ -85,6 +85,7 @@ if(process.env.NODE_ENV === "development"){
         output:{
             filename:'[name].[chunkhash:8].js',
             path:path.resolve(__dirname,'../assets'),
+            publicPath:'/assets/'
         },
         module:{
             rules:[

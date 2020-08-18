@@ -1,8 +1,12 @@
 <template>
-    <transition name="fade">
-        <div class="notification-wrapper">
+    <transition
+        name="fade"
+        @after-leave="afterLeave"
+        @after-enter="afterEnter"
+    >
+        <div class="notification-wrapper" :style="styleObj" v-show="visible">
             <p class="content">{{content}}</p>
-            <span class="close">{{btn}}</span>
+            <span class="close" @click="handleCancel">{{cancel}}</span>
         </div>
     </transition>
 </template>
@@ -10,32 +14,54 @@
 <script>
     export default {
         name:'Notification',
-        props:{
-            content:{
-                type:String,
-                required:true
+        data(){
+            return {
+                visible:true,
+                height:0
+            }
+        },
+        computed:{
+            styleObj(){
+                return {
+                    bottom:this.verticalHeight + 'px'
+                }
+            }
+        },
+        methods:{
+            afterLeave(){
+                this.$emit('closed');
             },
-            btn:{
-                type:String,
-                required:true
+            handleCancel(){
+                this.$emit('close')
+            },
+            afterEnter(){
+                this.height = this.$el.offsetHeight;
             }
         }
     }
 </script>
 
 <style scoped lang='scss'>
+    .fade-enter-active,.fade-leave-active{
+        transition:opacity .4s;
+    }
+    .fade-enter,.fade-leave-to{
+        opacity:0;
+    }
     .notification-wrapper{
         right:10px;
-        bottom:15px;
+        bottom:6px;
         position:absolute;
         width:240px;
-        height:80px;
-        background-color:rgba(0,0,0,.35);
+        height:70px;
+        background-color:rgba(175, 47, 47, 0.3);
         border-radius:5px;
+        transition:all .35s;
         .content{
             text-align:center;
-            line-height:80px;
+            line-height:70px;
             color:#fff;
+            font-size:13px;
         }
         .close{
             position:absolute;

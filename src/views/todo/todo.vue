@@ -29,6 +29,7 @@
 <script>
     import TodoItem from './todo-item.vue';
     import Tabs from './tabs.vue';
+    import {notification} from '../../components/notification/index.js';
 
     let nextId = 0;
     export default {
@@ -60,6 +61,9 @@
                     id:nextId++,
                     text:event.target.value.trim(),
                     completed:false
+                });
+                notification({
+                    content:'今日新增一个事项哦！'
                 });
                 event.target.value = "";
             },
