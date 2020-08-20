@@ -5,20 +5,21 @@
         <transition name="fade">
             <router-view/>
         </transition>
-        <button @click="handleNotification">add</button>
     </div>
 </template>
 
 <script>
     import vHeader from './layout/v-header.vue';
     import vFooter from './layout/v-footer.vue';
-    import {notification} from './components/notification/index.js';
     export default {
         data(){
             return {
                 title:'App Page',
                 keywords:'vue todo vue-meta',
-                description:'this is a todo-list app page'
+                description:'this is a todo-list app page',
+                tabs:[
+                    {label:'all'},{label:'active',label:'completed'}
+                ]
             }
         },
         metaInfo(){
@@ -36,20 +37,12 @@
                 ]
             }
         },
+        methods:{
+
+        },
         components:{
             vHeader,
             vFooter,
-        },
-        methods:{
-            handleNotification(){
-                notification({
-                    content:'hello ',
-                    cancel:'关闭',
-                    handleCancel(){
-                        console.log('关闭');
-                    }
-                })
-            }
         },
     }
 </script>
@@ -62,6 +55,7 @@
         top:0;
         bottom:0;
         overflow:auto;
+        background-color:#f9f9f9;
         .cover{
             position:absolute;
             left:0;

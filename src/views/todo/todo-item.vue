@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import {notification} from '../../components/notification/index.js'
     export default {
         props:{
             todo:{
@@ -32,7 +33,16 @@
                 this.$emit('del',id);
             },
             toggleTodo(){
-                this.todo.completed = true;
+                this.todo.completed = !this.todo.completed;
+                if(this.todo.completed){
+                    notification({
+                        content:'已经完成一个代办事项！'
+                    })
+                }else{
+                    notification({
+                        content:'已经切换为代办事项！'
+                    })
+                }
             }
         }
     }

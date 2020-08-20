@@ -69,7 +69,10 @@ if(process.env.NODE_ENV === "development"){
             historyApiFallback:{
                 index:'/assets/index.html'
             },
-            headers:{"Access-Control-Allow-Origin":"*"}
+            headers:{"Access-Control-Allow-Origin":"*"},
+            proxy:{
+                '/api':'http://127.0.0.1:3000'
+            }
         },
         plugins:defaultPlugins.concat([
             new webpack.HotModuleReplacementPlugin()

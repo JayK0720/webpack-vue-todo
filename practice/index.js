@@ -1,1 +1,1 @@
-import './extend/index.js';
+import './slot/index.js';

@@ -17,6 +17,11 @@ export function createRouter(){
                 path:'/login',
                 component:() => import ('../views/login/login.vue'),
             },
+            {
+                name:'register',
+                path:'/register',
+                component:() => import('../views/register/register.vue')
+            }
         ],
         scrollBehavior:function(to,from,savedPosition){
             console.log(savedPosition);

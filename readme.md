@@ -829,8 +829,25 @@ module.exports = {
 }
 ```
     
+## 后台设置允许跨域
+
+    koa-cors package
+        yarn add koa-cors -S
+```js
+const Koa = require('koa');
+const cors = require('koa-cors');
+const app = new Koa();
+
+app.use(cors());
+```    
     
-    
+    手动设置时:
+        ctx.set('Access-Control-Allow-Origin',"*"); 允许来自所有域名的请求(不携带cookie请求可以用*)
+    如果有携带cookie请求必须指定域名,
+    // ctx.set('Access-Control-Allow-Origin','http://localhost:8000') 只允许指定域名的请求
+       ctx.set('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+       ctx.set('Access-Control-Allow-Credentials',true)    表示是否允许发送cookie
+
     
     
     

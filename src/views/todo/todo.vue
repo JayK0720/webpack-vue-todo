@@ -4,7 +4,7 @@
             <input
                 class="add-input"
                 type="text"
-                placeholder="接下去要做什么?"
+                placeholder="what next to do?"
                 autofocus="true"
                 @keyup.enter="addTodo"
             >
@@ -30,6 +30,7 @@
     import TodoItem from './todo-item.vue';
     import Tabs from './tabs.vue';
     import {notification} from '../../components/notification/index.js';
+    import {mapState,mapActions} from 'vuex';
 
     let nextId = 0;
     export default {
@@ -38,8 +39,7 @@
         },
         data() {
             return {
-                todos:[],
-                filter:"all"
+                filter:"all",
             }
         },
         components:{
@@ -47,15 +47,17 @@
             Tabs
         },
         computed:{
+            ...mapState(['todos']),
             filterTodoList(){
                 if(this.filter === 'all'){
                     return this.todos;
                 }
                 const completed = this.filter === 'completed';
                 return this.todos.filter(todo => todo.completed === completed);
-            }
+            },
         },
         methods:{
+            ...mapActions(['getAllTodos']),
             addTodo(event){
                 this.todos.unshift({
                     id:nextId++,
@@ -63,12 +65,23 @@
                     completed:false
                 });
                 notification({
-                    content:'今日新增一个事项哦！'
+                    content:'今日新增一个事项哦！',
+                    cancel:'X'
                 });
                 event.target.value = "";
             },
             deleteTodo(id){
                 const index = this.todos.findIndex(todo => todo.id === id);
+                const todo = this.todos[index];
+                if(todo.completed){
+                    notification({
+                        content:'已删除一个完成事项!'
+                    })
+                }else{
+                    notification({
+                        content:'已删除一个代办事项!'
+                    })
+                }
                 this.todos.splice(index,1);
             },
             toggleFilter(filter){
@@ -76,7 +89,15 @@
             },
             clearCompleted(){
                 this.todos = this.todos.filter(todo => !todo.completed);
-            }
+                notification({
+                    content:'已删除所有完成事项！',
+                    cancel:'X'
+                })
+            },
+        },
+        mounted(){
+            this.getAllTodos();
+            console.log(this.todos);
         },
         beforeRouteEnter(to,from,next){
             console.log('todo router before enter invoked');

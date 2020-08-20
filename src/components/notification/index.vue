@@ -2,9 +2,14 @@
     <transition
         name="fade"
         @after-leave="afterLeave"
-        @after-enter="afterEnter"
     >
-        <div class="notification-wrapper" :style="styleObj" v-show="visible">
+        <div
+            class="notification-wrapper"
+            :style="styleObj"
+            v-show="visible"
+            @mouseenter="clearTimer"
+            @mouseout="createTimer"
+        >
             <p class="content">{{content}}</p>
             <span class="close" @click="handleCancel">{{cancel}}</span>
         </div>
@@ -27,16 +32,19 @@
                 }
             }
         },
+        mounted(){
+            this.$nextTick(() => {
+                this.height = this.$el.offsetHeight;
+            })
+        },
         methods:{
             afterLeave(){
+                console.log('after leave');
                 this.$emit('closed');
             },
             handleCancel(){
                 this.$emit('close')
             },
-            afterEnter(){
-                this.height = this.$el.offsetHeight;
-            }
         }
     }
 </script>
@@ -57,6 +65,7 @@
         background-color:rgba(175, 47, 47, 0.3);
         border-radius:5px;
         transition:all .35s;
+        user-select:none;
         .content{
             text-align:center;
             line-height:70px;
