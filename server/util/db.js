@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
 
-const TodoSchema = new mongoose.Schema({
-    text:String,
-    id:Number,
-    completed:Boolean
+const UserSchema = new mongoose.Schema({
+    username:String,
+    password:String,
+    email:String,
+    date:Date,
+    todos:Array,
 })
 
-const Todo = mongoose.model('todo',TodoSchema)
+const Todo = mongoose.model('todo',UserSchema)
 
 const Mongoose = {
     url:'mongodb://localhost:27017/todo',
@@ -21,7 +24,22 @@ const Mongoose = {
     }
 }
 
+const Email = {
+    config:{
+        host: "smtp.qq.com",
+        port: 587,
+        auth: {
+            user: '2165767230@qq.com',
+            pass:'evxesxpbruqrebaa' ,
+        },
+    },
+    get transporter(){
+        return nodemailer.createTransport(this.config)
+    }
+}
+
 module.exports = {
     Mongoose,
-    Todo
+    Todo,
+    Email
 }

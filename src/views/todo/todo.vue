@@ -9,20 +9,27 @@
                 @keyup.enter="addTodo"
             >
         </div>
-        <div class="todo-list">
-            <todo-item
-                v-for="(todo,index) in filterTodoList"
-                :key="index"
-                :todo="todo"
-                @del="deleteTodo"
-            />
-            <tabs
-                :filter="filter"
-                :todos="todos"
-                @toggle="toggleFilter"
-                @clearCompleted="clearCompleted"
-            />
-        </div>
+        <template v-if="todos.length">
+            <div class="todo-list">
+                <todo-item
+                    v-for="(todo,index) in filterTodoList"
+                    :key="index"
+                    :todo="todo"
+                    @del="deleteTodo"
+                />
+            </div>
+        </template>
+        <template v-else>
+            <div class="nothing">
+                👌 nothing to do!!!
+            </div>
+        </template>
+        <tabs
+            :filter="filter"
+            :todos="todos"
+            @toggle="toggleFilter"
+            @clearCompleted="clearCompleted"
+        />
     </div>
 </template>
 
@@ -31,7 +38,7 @@
     import Tabs from './tabs.vue';
     import {notification} from '../../components/notification/index.js';
     import {mapState,mapActions} from 'vuex';
-
+    import axios from 'axios';
     let nextId = 0;
     export default {
         metaInfo:{
@@ -101,6 +108,15 @@
         },
         beforeRouteEnter(to,from,next){
             console.log('todo router before enter invoked');
+            axios.get('http://localhost:3000/api/user/getUser').then(response => {
+                const code = response.data.code ;
+                console.log(code);
+                if(code === 0) {
+                    next()
+                }else{
+                    next('/login')
+                }
+            })
             next();
         },
         beforeRouteUpdate(to,from,next){
@@ -121,13 +137,21 @@
         box-shadow:0 0 5px #666;
         background-color:#Fefefe;
         border-radius:4px;
+        .nothing{
+            border-top:1px solid #F1f1f1;
+            height:70px;
+            line-height:70px;
+            text-align:center;
+            color:#ccc;
+            font-style:italic;
+        }
         .input-wrapper{
-            height:50px;
+            height:60px;
             width:600px;
         }
         .add-input{
             width:100%;
-            height:50px;
+            height:60px;
             padding:0;
             border:none;
             outline:none;

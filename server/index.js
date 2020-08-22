@@ -4,7 +4,9 @@ const static = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const path = require('path');
 const todoRouter = require('./router/api.js');
+const userRouter = require('./router/user.js');
 const {Mongoose} = require('./util/db.js');
+const session = require('koa-session');
 const cors = require('koa-cors');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -13,6 +15,18 @@ app.use(bodyParser());
 app.use(static(
     path.resolve(__dirname,'../assets')
 ));
+
+app.keys = ['vue ssr demo'];
+const CONFIG = {
+    key: 'koa:sess',
+    maxAge: 86400000,
+    overwrite: true,
+    httpOnly: true,
+    signed: true,
+    rolling: false,
+    renew: false,
+};
+app.use(session(CONFIG, app));
 
 app.use(cors());
 app.use(async (ctx,next) => {
@@ -40,6 +54,7 @@ if(isDevelopment){
 
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods());
 app.use(todoRouter.routes()).use(todoRouter.allowedMethods());
+app.use(userRouter.routes()).use(userRouter.allowedMethods());
 
 app.listen(3000,() => {
     console.log('app starting at port 3000');

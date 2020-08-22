@@ -1,6 +1,5 @@
 <template>
     <div class="real-server">
-        <div class="cover"></div>
         <vHeader/>
         <transition name="fade">
             <router-view/>
@@ -56,19 +55,5 @@
         bottom:0;
         overflow:auto;
         background-color:#f9f9f9;
-        .cover{
-            position:absolute;
-            left:0;
-            right:0;
-            top:0;
-            opacity:0.3;
-            z-index:-1;
-        }
-        .fade-enter-active,.fade-leave-active{
-            transition:opacity .3s;
-        }
-        .fade-enter,.fade-leave-to{
-            opacity:0;
-        }
     }
 </style>

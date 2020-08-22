@@ -7,6 +7,7 @@ const responseData = (data) => {
         data
     }
 }
+
 const router = new Router({
     prefix:'/api/todo'
 });
@@ -14,7 +15,7 @@ const router = new Router({
 // 获取所有的todos 列表
 router.get('/all',async ctx => {
     const result = await Todo.find();
-    ctx.body = responseData(result);
+    ctx.body = responseData(result.todos);
 });
 
 router.post('/add',async ctx => {
@@ -32,7 +33,6 @@ router.post('/add',async ctx => {
 
 router.put('/update/:id',async ctx => {
     const {id} = ctx.params;
-
 })
 
 router.get('/delete/:id',async ctx => {

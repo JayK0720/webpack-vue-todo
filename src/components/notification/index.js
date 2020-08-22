@@ -2,11 +2,6 @@ import Vue from 'vue';
 import Notification from './index.vue';
 
 export const notification = (function(){
-    const defaults = {
-        content:'',
-        cancel:'',
-        handleCancel:null
-    }
     // 新增加的实例数组,用于添加新创建的实例对象
     let notifications = [];
     let seed = 0;
@@ -21,6 +16,11 @@ export const notification = (function(){
         }
     }
     return function(options) {
+        const defaults = {
+            content:'',
+            cancel:'',
+            handleCancel:null
+        }
         for(let key in options){
             defaults[key] = options[key]
         }
