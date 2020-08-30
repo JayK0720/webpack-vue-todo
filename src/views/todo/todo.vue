@@ -6,7 +6,7 @@
                 type="text"
                 placeholder="what next to do?"
                 autofocus="true"
-                @keyup.enter="addTodo"
+                @keyup.enter="handleAddTodo"
             >
         </div>
         <template v-if="todos.length">
@@ -15,7 +15,8 @@
                     v-for="(todo,index) in filterTodoList"
                     :key="index"
                     :todo="todo"
-                    @del="deleteTodo"
+                    @del="handleDeleteTodo"
+                    @toggle="handleToggleTodo"
                 />
             </div>
         </template>
@@ -30,6 +31,7 @@
             @toggle="toggleFilter"
             @clearCompleted="clearCompleted"
         />
+        <loading v-show="isLoading"/>
     </div>
 </template>
 
@@ -37,9 +39,9 @@
     import TodoItem from './todo-item.vue';
     import Tabs from './tabs.vue';
     import {notification} from '../../components/notification/index.js';
-    import {mapState,mapActions} from 'vuex';
     import axios from 'axios';
-    let nextId = 0;
+    import loading from '../../components/loading/index.vue';
+    import {mapState,mapActions,mapMutations} from 'vuex'
     export default {
         metaInfo:{
             title:'Todo Page'
@@ -47,11 +49,13 @@
         data() {
             return {
                 filter:"all",
+                isLoading:true
             }
         },
         components:{
             TodoItem,
-            Tabs
+            Tabs,
+            loading
         },
         computed:{
             ...mapState(['todos']),
@@ -63,69 +67,58 @@
                 return this.todos.filter(todo => todo.completed === completed);
             },
         },
+        created(){
+            this.getAllTodos();
+        },
         methods:{
-            ...mapActions(['getAllTodos']),
-            addTodo(event){
-                this.todos.unshift({
-                    id:nextId++,
-                    text:event.target.value.trim(),
-                    completed:false
-                });
-                notification({
-                    content:'今日新增一个事项哦！',
-                    cancel:'X'
-                });
+            ...mapActions(['getAllTodos','addTodoAsync',"deleteTodoAsync","clearTodoAsync",'toggleTodoAsync']),
+            ...mapMutations(['setUser']),
+            handleAddTodo(event){
+                if(!event.target.value.trim()){
+                    notification({
+                        text:'代办事项不能为空哦！'
+                    });
+                    return;
+                }
+                const todo = {id:Date.now(),text:event.target.value,completed:false};
+                this.addTodoAsync(todo);
                 event.target.value = "";
             },
-            deleteTodo(id){
-                const index = this.todos.findIndex(todo => todo.id === id);
-                const todo = this.todos[index];
-                if(todo.completed){
-                    notification({
-                        content:'已删除一个完成事项!'
-                    })
-                }else{
-                    notification({
-                        content:'已删除一个代办事项!'
-                    })
-                }
-                this.todos.splice(index,1);
+            handleDeleteTodo(id){
+                this.deleteTodoAsync(id);
             },
             toggleFilter(filter){
                 this.filter = filter;
             },
             clearCompleted(){
-                this.todos = this.todos.filter(todo => !todo.completed);
-                notification({
-                    content:'已删除所有完成事项！',
-                    cancel:'X'
-                })
+                this.clearTodoAsync()
             },
+            handleToggleTodo(todo){
+                this.toggleTodoAsync({
+                    id:todo.id,
+                    todo:Object.assign({},todo,{
+                        completed:!todo.completed
+                    })
+                })
+            }
         },
-        mounted(){
-            this.getAllTodos();
-            console.log(this.todos);
-        },
+        // beforeRouteEnter里没有this,可以在next回调函数里再调用
         beforeRouteEnter(to,from,next){
-            console.log('todo router before enter invoked');
-            axios.get('http://localhost:3000/api/user/getUser').then(response => {
-                const code = response.data.code ;
-                console.log(code);
-                if(code === 0) {
-                    next()
+            axios({
+                url:"http://localhost:3000/api/user/info",
+                method:'get',
+                withCredentials:true
+            }).then(response => {
+                if(response.data.code === 0) {
+                    const username = response.data.data.username;
+                    next((vm) => {
+                        vm.isLoading = false;
+                        vm.setUser(username);
+                    });
                 }else{
-                    next('/login')
+                    next('/login');
                 }
             })
-            next();
-        },
-        beforeRouteUpdate(to,from,next){
-            console.log('todo router before update invoked');
-            next();
-        },
-        beforeRouteLeave(to,from,next){
-            console.log('todo router before leave invoked');
-            next();
         }
     }
 </script>

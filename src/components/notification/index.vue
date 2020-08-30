@@ -62,7 +62,7 @@
         position:absolute;
         width:240px;
         height:70px;
-        background-color:rgba(175, 47, 47, 0.3);
+        background-color:#00c544;
         border-radius:5px;
         transition:all .35s;
         user-select:none;

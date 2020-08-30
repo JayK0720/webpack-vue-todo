@@ -31,7 +31,7 @@ if(process.env.NODE_ENV === "development"){
         output:{
             filename:'[name].bundle.[hash:8].js',
             path:path.resolve(__dirname,'../dist'),
-            publicPath:'http://127.0.0.1:9000/assets'
+            publicPath:'http://127.0.0.1:8000/assets'
         },
         module:{
             rules:[
@@ -56,8 +56,8 @@ if(process.env.NODE_ENV === "development"){
             ]
         },
         devServer:{
-            port:'9000',
-            host:'0.0.0.0',
+            port:'8000',
+            host:'localhost',
             overlay:{
                 errors:true, // 遇到错误时会更新到页面上
                 warnings:true
@@ -69,10 +69,6 @@ if(process.env.NODE_ENV === "development"){
             historyApiFallback:{
                 index:'/assets/index.html'
             },
-            headers:{"Access-Control-Allow-Origin":"*"},
-            proxy:{
-                '/api':'http://127.0.0.1:3000'
-            }
         },
         plugins:defaultPlugins.concat([
             new webpack.HotModuleReplacementPlugin()

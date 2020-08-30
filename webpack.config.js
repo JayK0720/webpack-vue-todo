@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === "development";
 const config = {
     mode:'development',
     target:"web",
-    entry:path.join(__dirname,'src/app.js'),
+    entry:path.join(__dirname,'src/node-app.js'),
     output:{
         filename:'bundle.[hash:8].js',
         path:path.resolve(__dirname,'dist')
@@ -92,7 +92,7 @@ if(process.env.NODE_ENV === 'development'){
     )
 }else{
     config.entry = {
-        app:path.join(__dirname,'src/app.js'),
+        app:path.join(__dirname,'src/node-app.js'),
         vendor:['vue']
     };
     config.output.filename = '[name].[chunkhash:8].js';

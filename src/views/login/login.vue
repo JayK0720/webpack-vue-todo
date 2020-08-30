@@ -47,26 +47,32 @@
             return {
                 username:'',
                 password:'',
-                errMessage:""
+                errMessage:"",
             }
         },
         methods:{
             handleSubmit(e){
                 e.preventDefault();
-                // 如果姓名和密码都输入了
                 if( this.validate() ) {
-                    this.axios.post('http://localhost:3000/api/user/login',{
-                        username:this.username,
-                        email:this.username,
-                        password:this.password
-                    }).then(response => {
-                        console.log(response);
+                    this.axios({
+                        method:'post',
+                        url:"http://localhost:3000/api/user/login",
+                        data:{
+                            username:this.username,
+                            password:this.password,
+                        },
+                        withCredentials:true,
+                    })
+                    .then(response => {
                         if(response.data.code === 0) {
+                            console.log(response);
                             notification({
                                 content:'登陆成功',
                                 cancel:'X'
-                            })
-                            this.$router.replace('/');
+                            });
+                            setTimeout(() => {
+                                this.$router.push('/todo');
+                            },0)
                         }else{
                             this.errMessage = '用户名或密码错误！'
                         }

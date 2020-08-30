@@ -3,8 +3,8 @@
         <div class="left-content">
             <input
                 type="checkbox"
-                v-model="todo.completed"
                 class="toggle-todo"
+                :checked="todo.completed"
                 @click="toggleTodo"
             >
             <p class="text">
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import {notification} from '../../components/notification/index.js'
     export default {
         props:{
             todo:{
@@ -32,17 +31,9 @@
             deleteTodo(id){
                 this.$emit('del',id);
             },
-            toggleTodo(){
-                this.todo.completed = !this.todo.completed;
-                if(this.todo.completed){
-                    notification({
-                        content:'已经完成一个代办事项！'
-                    })
-                }else{
-                    notification({
-                        content:'已经切换为代办事项！'
-                    })
-                }
+            toggleTodo(event){
+                event.preventDefault();
+                this.$emit('toggle',this.todo);
             }
         }
     }
@@ -56,7 +47,7 @@
         list-style:none;
         padding:0 20px;
         height:50px;
-        border-top:1px solid #ccc;
+        border-top:1px solid #e1e1e1;
         .left-content{
             flex:1;
             display:flex;

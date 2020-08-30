@@ -6,6 +6,25 @@ const router = new Router({
     prefix:'/api/user'
 });
 
+// 邮箱验证接口
+router.get('/verify',async ctx => {
+    const verify = Math.random().toString().substring(2,6);
+    const {email} = ctx.request.query;
+    ctx.session.email = email;
+    ctx.session.verify = verify;
+    let info = await Email.transporter.sendMail({
+        from:'2165767230@qq.com',
+        to:email,
+        subject:'todo-list 验证码',
+        text:'验证码:'+ verify
+    })
+    if(info) {
+        ctx.body = {
+            code:0,
+            message:'发送成功'
+        };
+    }
+});
 // 注册接口
 router.post('/register',async ctx => {
     const {username,email,verify,password} = ctx.request.body;
@@ -38,7 +57,6 @@ router.post('/register',async ctx => {
         password,
         todos:[]
     });
-
     const result = await user.save();
     if(result) {
         ctx.body = {
@@ -46,16 +64,14 @@ router.post('/register',async ctx => {
             message:'注册成功'
         }
     }
-})
-
+});
 // 登陆接口
-router.post('/login', async ctx => {
+router.post('/login', async (ctx) => {
     const {username,password} = ctx.request.body;
-    console.log(username,password);
-    let result = await Todo.find({username,password})
+    let result = await Todo.find({username,password});
     if(result.length) {
-        ctx.session.uername = username;
-        ctx.state.username = username;
+        //  登陆成功的时候,保存当前的用户名!
+        ctx.session.username = username;
         ctx.body = {
             code:0,
             message:'登陆成功'
@@ -67,43 +83,21 @@ router.post('/login', async ctx => {
         }
     }
 })
-
-// 邮箱验证接口
-router.get('/verify',async ctx => {
-    const verify = Math.random().toString().substring(2,6);
-    const {email} = ctx.request.query;
-
-    ctx.session.email = email;
-    ctx.session.verify = verify;
-
-    let info = await Email.transporter.sendMail({
-        from:'2165767230@qq.com',
-        to:email,
-        subject:'todo-list 验证码',
-        text:'验证码:'+ verify
-    })
-    if(info) {
-        ctx.body = {
-            code:0,
-            message:'发送成功'
-        };
-    }
-});
-
-router.get('/getUser',async ctx => {
-    console.log('session:',ctx.session.username);
+// 判断当前是否登陆
+router.get('/info',async ctx => {
+    console.log('is login ?', ctx.session.username);
     if(ctx.session.username){
         ctx.body = {
             message:'获取用户信息成功',
-            code:0
+            code:0,
+            data:{
+                username:ctx.session.username
+            }
         }
     }else{
         ctx.body = {
             message:'获取用户信息失败',
             code:-1
-        }
-        ctx.state = {
-            username:''
         }
     }
 })

@@ -8,7 +8,7 @@ export function createRouter(){
         linkExactActiveClass:'active',
         routes:[
             {
-                path:'/',
+                path:'/todo',
                 name:'todo',
                 component:() => import ('../views/todo/todo.vue')
             },
@@ -21,6 +21,10 @@ export function createRouter(){
                 name:'register',
                 path:'/register',
                 component:() => import('../views/register/register.vue')
+            },
+            {
+                path:'/*',
+                redirect:'/login'
             }
         ],
         scrollBehavior:function(to,from,savedPosition){

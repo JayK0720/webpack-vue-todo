@@ -3,11 +3,10 @@ const app = new Koa();
 const static = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const path = require('path');
-const todoRouter = require('./router/api.js');
+const todoRouter = require('./router/todo.js');
 const userRouter = require('./router/user.js');
 const {Mongoose} = require('./util/db.js');
 const session = require('koa-session');
-const cors = require('koa-cors');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 app.use(bodyParser());
@@ -17,20 +16,26 @@ app.use(static(
 ));
 
 app.keys = ['vue ssr demo'];
-const CONFIG = {
+
+const config = {
     key: 'koa:sess',
-    maxAge: 86400000,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
     overwrite: true,
     httpOnly: true,
     signed: true,
     rolling: false,
-    renew: false,
+    renew: true,
+    sameSite:null,
+    secure:false,
 };
-app.use(session(CONFIG, app));
+app.use(session(config, app));
 
-app.use(cors());
 app.use(async (ctx,next) => {
     try {
+        ctx.set('Access-Control-Allow-Origin',"http://localhost:8000");
+        ctx.set("Access-Control-Allow-Methods","PUT,POST,GET,DELETE");
+        ctx.set("Access-Control-Allow-Credentials",true);
+        ctx.set("Access-Control-Allow-Headers","Content-Type");
         await next();
     }catch(err){
         console.log(err);

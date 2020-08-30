@@ -36,9 +36,6 @@
                 ]
             }
         },
-        methods:{
-
-        },
         components:{
             vHeader,
             vFooter,
