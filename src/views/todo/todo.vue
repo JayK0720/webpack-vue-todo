@@ -31,7 +31,7 @@
             @toggle="toggleFilter"
             @clearCompleted="clearCompleted"
         />
-        <loading v-show="isLoading"/>
+        <loading v-show="loading"/>
     </div>
 </template>
 
@@ -49,7 +49,6 @@
         data() {
             return {
                 filter:"all",
-                isLoading:true
             }
         },
         components:{
@@ -58,7 +57,7 @@
             loading
         },
         computed:{
-            ...mapState(['todos']),
+            ...mapState(['todos','loading']),
             filterTodoList(){
                 if(this.filter === 'all'){
                     return this.todos;
@@ -76,7 +75,7 @@
             handleAddTodo(event){
                 if(!event.target.value.trim()){
                     notification({
-                        text:'代办事项不能为空哦！'
+                        content:'代办事项不能为空哦！'
                     });
                     return;
                 }

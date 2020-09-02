@@ -4,7 +4,7 @@
             <input
                 type="checkbox"
                 class="toggle-todo"
-                :checked="todo.completed"
+                v-model="todo.completed"
                 @click="toggleTodo"
             >
             <p class="text">
@@ -32,7 +32,6 @@
                 this.$emit('del',id);
             },
             toggleTodo(event){
-                event.preventDefault();
                 this.$emit('toggle',this.todo);
             }
         }
@@ -48,6 +47,10 @@
         padding:0 20px;
         height:50px;
         border-top:1px solid #e1e1e1;
+        &:hover{
+            background-color:#eee;
+            cursor:pointer;
+        }
         .left-content{
             flex:1;
             display:flex;

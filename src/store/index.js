@@ -19,7 +19,8 @@ export function createStore(){
     const store = new Vuex.Store({
         state:{
             todos:[],
-            username:""
+            username:"",
+            loading:false
         },
         mutations:{
             getTodos(state,todos) {
@@ -43,23 +44,32 @@ export function createStore(){
                 const unCompletedTodos = state.todos.filter((todo) => !todo.completed);
                 state.todos = unCompletedTodos;
             },
+            startLoading(state){
+                state.loading = true;
+            },
+            endLoading(state){
+              state.loading = false;
+            }
         },
         actions:{
             getAllTodos({commit}) {
+                commit('startLoading');
                 axios({
                     method:"get",
                     url:"http://localhost:3000/api/todo/all",
                     withCredentials:true
                 }).then(response => {
                     const todos = response.data.data;
+                    commit('endLoading');
                     commit('getTodos',todos);
                 })
             },
             addTodoAsync({commit,state},todo){
+                commit('startLoading');
+                commit('addTodo',todo);
                 updateTodo(state).then(response => {
-                    console.log('add',response);
                     if(response.data.code === 0) {
-                        commit('addTodo',todo);
+                        commit('endLoading');
                         notification({
                             content:"今日已新增一个事项哦！"
                         })
@@ -67,10 +77,11 @@ export function createStore(){
                 })
             },
             deleteTodoAsync({commit,state},id){
+                commit('deleteTodo',id);
+                commit('startLoading');
                 updateTodo(state).then(response => {
-                    console.log("delete",response);
+                    commit('endLoading');
                     if(response.data.code === 0) {
-                        commit('deleteTodo',id);
                         notification({
                             content:'今日已完成一件事情,继续加油！'
                         })
@@ -78,9 +89,11 @@ export function createStore(){
                 })
             },
             clearTodoAsync({commit,state}){
+                commit('startLoading');
+                commit('clearTodo');
                 updateTodo(state).then(response => {
                     if(response.data.code === 0){
-                        commit('clearTodo');
+                        commit('endLoading');
                         notification({
                             content:"已清除所有完成事项!"
                         })
@@ -88,9 +101,11 @@ export function createStore(){
                 })
             },
             toggleTodoAsync({commit,state},{id,todo}){
+                commit('startLoading');
+                commit("updateTodo",{id,todo});
                 updateTodo(state).then(response => {
                     if(response.data.code === 0) {
-                        commit("updateTodo",{id,todo});
+                        commit('endLoading');
                         if(todo.completed) {
                             notification({
                                 content:"已切换为已完成事项"

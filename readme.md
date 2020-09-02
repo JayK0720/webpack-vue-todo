@@ -894,16 +894,81 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+## Vue transition问题
+
+    在login 登陆成功后进入 todo 页面时, 因为路由是通过 opacity 显示来切换的,
+    在login页面还没有完全 消失的时候, todo页面已经开始显示,并从底部开始往上移动显示。
+    
+    解决这个bug:
+         <transition mode='out-in'></transition>
+    先出后进
+    
+# axios
+
+    常用请求方法:
+        get post put patch
+        get:    请求数据
+        post:   提交数据(表单提交+文件上传)
+        put:    更新数据(所有数据更新到服务端)
+        patch:  更新数据(只将修改的数据推送到后端)
+        
+    请求使用方法:
+```js
+axios({
+    method:"get",
+    url:"http://xxxxx",
+    params:{}
+})
+
+axios.get("http://xxxxx",{
+    params:{}
+})
+
+axios.post(url,data,config)
+axios({
+    url,
+    method:"post",
+    data:{}
+})
+// put 和 patch方法同post使用方法
+```
+
     
     
+    执行多个并发请求:
+        请求的数据顺序按照axios.all()数组里的顺序
+        
+    Example:
+        axios.all([axios.get('/api/player'),axios.get('/api/city')]).then(axios.spread((players,cities) => {
+            console.log("players:",players);
+            console.log("cities:",cities)
+        }));
+     
+    axios的配置方式:
+```js
+// 全局配置:
+    axios.defaults.baseURL = 'http://localhost:4000';
+    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    axios.defaults.timeout = 1000;
     
+// 实例配置:
+    axios.create({
+        baseURL:"http://localhost:4000/api",
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }
+    });
     
-    
-    
-    
-    
-    
-    
+// 请求配置:
+    axios.get("http://localhost:4000/api",{
+        timeout:4000,
+        headers:{
+        
+        }
+    })
+```
+
     
     
     

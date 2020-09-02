@@ -16,7 +16,6 @@ router.get('/all',async ctx => {
     const username = ctx.session.username;
     const query = {username};
     const result = await Todo.find(query);
-    console.log('result:',result);
     ctx.body = responseData(result[0].todos);
 });
 

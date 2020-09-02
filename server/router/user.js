@@ -6,6 +6,11 @@ const router = new Router({
     prefix:'/api/user'
 });
 
+router.use(async (ctx,next) => {
+    console.log(ctx.url);
+    await next();
+})
+
 // 邮箱验证接口
 router.get('/verify',async ctx => {
     const verify = Math.random().toString().substring(2,6);
@@ -85,7 +90,6 @@ router.post('/login', async (ctx) => {
 })
 // 判断当前是否登陆
 router.get('/info',async ctx => {
-    console.log('is login ?', ctx.session.username);
     if(ctx.session.username){
         ctx.body = {
             message:'获取用户信息成功',
@@ -99,6 +103,14 @@ router.get('/info',async ctx => {
             message:'获取用户信息失败',
             code:-1
         }
+    }
+});
+
+router.post('/logout',async ctx => {
+    ctx.session.username = "";
+    ctx.body = {
+        code:0,
+        message:"退出成功"
     }
 })
 
