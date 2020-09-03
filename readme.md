@@ -933,7 +933,7 @@ axios({
 })
 // put 和 patch方法同post使用方法
 ```
-
+    withCredentials:false       // 表示跨域请求时是否需要使用凭证。
     
     
     执行多个并发请求:
@@ -953,12 +953,13 @@ axios({
     axios.defaults.timeout = 1000;
     
 // 实例配置:
-    axios.create({
+    const instance = axios.create({
         baseURL:"http://localhost:4000/api",
         headers:{
             "Content-Type":"application/x-www-form-urlencoded"
         }
     });
+// tips: instance 实例配置没有 all方法。
     
 // 请求配置:
     axios.get("http://localhost:4000/api",{
@@ -969,6 +970,42 @@ axios({
     })
 ```
 
+    拦截器,请求拦截器和响应拦截器
+```js
+// Usage
+const instance = axios.create({});
+
+instance.interceptors.request.use((config) => { // 可以在此处对响应做配置, return config });
+instance.interveptors.response.use((response) => {//可以在此处对response修改, return response });
+```
+    错误处理
+```js
+// 在请求错误和 响应错误 做一层处理,也是利用拦截器
+const instance = axios.create({});
+
+// 请求拦截器
+instance.interceptors.request.use(config => {
+    return config;
+},err => {
+// 请求错误一般是 401 overtime     404 not found
+    model.show();
+    setTimeout(() => {
+        model.hide();
+    },1500);
+    return Promise.reject(err);
+});
+
+// 响应拦截器
+instance.interceptors.response.use(response => {
+    return response;
+},err => {
+    model.show();
+    setTimeout(() => {
+        model.hide();
+    },1500);
+    return Promise.reject(err);
+})
+```
     
     
     
