@@ -934,7 +934,17 @@ axios({
 // put 和 patch方法同post使用方法
 ```
     withCredentials:false       // 表示跨域请求时是否需要使用凭证。
-    
+    默认情况下,axios将JavaScript对象序列化为JSON。要以application/x-www-form-urlencoded格式发送数据,可以使用qs库。
+```js
+import qs from 'qs';
+const data = {bar:123}
+axios({
+    method:"POST",
+    headers:{"content-type":"application/x-www-form-urlencoded"},
+    data:qs.stringify(data),
+    url
+})
+```
     
     执行多个并发请求:
         请求的数据顺序按照axios.all()数组里的顺序
