@@ -1,9 +1,13 @@
 import './style.css';
 import Home from './images/home.png';
+import {printMe} from './print.js';
 
 function component(){
 	const element = document.createElement('div');
-	element.innerText = 'hello webpack';
+	const button = document.createElement("button");
+	button.innerHTML = 'click me';
+	button.onclick = printMe;
+	element.appendChild(button);
 	return element;
 }
 document.body.appendChild(component());
