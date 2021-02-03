@@ -1,24 +1,12 @@
 import './style.css';
-import Home from './images/home.png';
-import {printMe} from './print.js';
+// import _ from 'lodash';
+// import print from './print.js'
 
-function component(){
-	const element = document.createElement('div');
-	const button = document.createElement("button");
-	button.innerHTML = 'click me';
-	button.onclick = printMe;
-	element.appendChild(button);
-	return element;
+function create_element(){
+	let div = document.createElement('div');
+	// div.onclick = print.bind(null,'hello webpack!');
+	div.textContent = 'hello';
+	document.body.appendChild(div);
 }
-document.body.appendChild(component());
-
-
-let img = document.createElement('img');
-img.src = Home;
-
-document.body.appendChild(img);
-
-
-let div = document.createElement('div');
-div.classList.add('hello');
-document.body.append(div);
+// console.log(_.join(['hello','hello']," "))
+create_element();

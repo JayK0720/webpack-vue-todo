@@ -1,21 +1,26 @@
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 
 module.exports = {
 	mode:"development",
-	// entry:"./src/index.js",
-	entry:{
-		index:'./src/index.js',
-		print:'./src/print.js'
-	},
+	entry:'./src/index.js',
 	output:{
-		// filename:'bundle.js',
-		filename:'[name].bundle.js',
-		path:path.resolve(__dirname,'dist'),
-		publicPath:"/"
+		filename:'[name].[contenthash].js',
+		path:path.join(__dirname,'dist')
 	},
-	// devtool:"inline-source-map",
+	optimization:{
+		runtimeChunk:"single",
+		splitChunks:{
+			cacheGroups:{
+				vendor:{
+					test:/[\\/]node_modules[\\/]/,
+					name:'vendors',
+					chunks:'all'
+				}
+			}
+		}
+	},
 	module:{
 		rules:[
 			{
@@ -23,19 +28,19 @@ module.exports = {
 				use:['style-loader','css-loader']
 			},
 			{
-				test:/\.(png|jpg|jpeg|svg)$/i,
-				type:'asset/resource'
+				test:/\.(png|jpeg|svg|gif)$/i,
+				type:"asset/resource"
 			}
 		]
 	},
-	devServer:{
-		contentBase:"./dist",
-		port:9000
-	},
 	plugins:[
-		new CleanWebpackPlugin({cleanStaleWebpackAssets:false}),
 		new HtmlWebpackPlugin({
-			title:"Development"
-		})
-	]
+			title:"代码分离"
+		}),
+		new CleanWebpackPlugin()
+	],
+	devServer:{
+		contentBase:path.join(__dirname,'dist'),
+		port:9090
+	}
 }
