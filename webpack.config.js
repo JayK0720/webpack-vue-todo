@@ -2,9 +2,11 @@ const path = require("path");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+let development = process.env.NODE_ENV;
 
 module.exports = {
 	mode:'development',
+	devtool:'inline-source-map',
 	entry:path.join(__dirname,'src/main.js'),
 	output:{
 		filename:"bundle.js",
@@ -13,25 +15,36 @@ module.exports = {
 	module:{
 		rules:[
 			{
+				test:/\.js$/,
+				exclude:/node_modules/,
+				use:[
+					{
+						loader:"babel-loader",
+					}
+				]
+			},
+			{
 				test:/\.vue$/i,
 				use:['vue-loader']
 			},
 			{
 				test:/\.(scss|css)$/,
-				use:['style-loader','css-loader','sass-loader']
+				use:[
+					'style-loader',
+					{
+						loader:"css-loader",
+						options:{
+							importLoaders:1
+						}
+					},
+					{
+						loader:"postcss-loader"
+					},
+					{
+						loader:"sass-loader",
+					}
+				]
 			},
-			// {
-			// 	test:/\.(gif|jpg|jpeg|png|svg)$/,
-			// 	use:[
-			// 		{
-			// 			loader:'url-loader',
-			// 			options:{
-			// 				limit:2 * 1024,
-			// 				name:'[name].[ext]'
-			// 			}
-			// 		}
-			// 	]
-			// }
 			{
 				test:/\.(png|jpeg|jpg)$/,
 				type:'asset/resource',
@@ -51,6 +64,11 @@ module.exports = {
 	devServer:{
 		contentBase:path.join(__dirname,'dist'),
 		port:9090,
-		compress:true
+		host:"0.0.0.0",
+		compress:true,
+		overlay:{
+			errors:true
+		},
+		hot:true
 	}
 }

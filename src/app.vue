@@ -1,6 +1,9 @@
 <template>
 	<div class="text">
 		<p>{{message}}</p>
+		<p>{{message}}</p>
+		<p>{{message}}</p>
+		<p>{{message}}</p>
 		<div class="home"></div>
 	</div>
 </template>
