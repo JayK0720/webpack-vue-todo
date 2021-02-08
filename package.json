@@ -33,8 +33,11 @@
   "dependencies": {
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
+    "ant-design-vue": "^1.7.2",
     "babel-loader": "^8.2.2",
+    "babel-plugin-import": "^1.13.3",
     "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
     "lodash": "^4.17.20",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.1",

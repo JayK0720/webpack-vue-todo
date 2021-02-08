@@ -70,5 +70,13 @@ module.exports = {
 			errors:true
 		},
 		hot:true
+	},
+	resolve:{
+		alias:{
+			"@":path.join(__dirname,'src'),
+		},
+		extensions:['.js','.vue','.json','.jsx'],
+		mainFiles:['index'],
+		modules:[path.join(__dirname,'src'),'node_modules']
 	}
 }

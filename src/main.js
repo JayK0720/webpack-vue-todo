@@ -1,14 +1,19 @@
 import Vue from 'vue';
 import App from './app.vue';
-import './style/reset.css';
+import router from './router';
+import '@/style/reset.css';
+import {Button,message} from 'ant-design-vue';
 
-let root = document.createElement('div');
+Vue.component(Button.name,Button);
+Vue.prototype.$message = message;
+
+let root = document.createElement("div");
 document.body.append(root);
-
-let vm = new Vue({
-	el:root,
-	render:(h) => h(App)
+new Vue({
+	render:(h) => h(App),
+	router
 }).$mount(root)
+
 
 
 
