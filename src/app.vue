@@ -1,6 +1,8 @@
 <template>
 	<div class="app">
-		<router-view></router-view>
+		<transition name="page-fade" mode='out-in'>
+			<router-view/>
+		</transition>
 	</div>
 </template>
 
@@ -16,4 +18,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.page-fade-enter-active,.page-fade-leave-active{
+		transition:all .45s;
+	}
+	.page-fade-enter,.page-fade-leave-to{
+		opacity:0;
+	}
 </style>
