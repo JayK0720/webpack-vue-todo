@@ -3,10 +3,16 @@
 		<h1 class="title">Just to do</h1>
 		<div class="todo-wrapper">
 			<div class="input-wrapper">
-				<a-input placeholder="What next to do" class="todo-input" v-model.trim="todo" @keyup.enter='add_todo'></a-input>
+				<a-input 
+					placeholder="What next to do" 
+					class="todo-input" 
+					v-model.trim="todo" 
+					@keyup.enter='add_todo'
+					:autoFocus="true"
+				></a-input>
 				<a-button type="primary" class="confirm-button" @click.stop="add_todo">确定</a-button>
 			</div>
-			<filtered 
+			<filter-tab 
 				:current_filter="current_filter" 
 				@set_filter="set_filter" 
 				@clear="clear"
@@ -23,7 +29,7 @@
 <script>
 	import {Input,Empty} from 'ant-design-vue'
 	import TodoList from '@/components/todo-list'
-	import Filtered from '@/components/filtered'
+	import FilterTab from '@/components/filter-tab'
 	const ALL = 'all', UNFINISHED = 'unfinished', FINISHED = 'finished';
 	export default {
 		name:"todo",
@@ -38,7 +44,7 @@
 			[Input.name]:Input,
 			TodoList,
 			[Empty.name]:Empty,
-			Filtered
+			FilterTab
 		},
 		computed:{
 			filter_todo_list(){
@@ -124,9 +130,13 @@
 			line-height:54px;
 		}
 		.todo-wrapper{
-			margin:15px auto;
-			width:600px;
+			margin:15px auto 0;
+			padding:24px 15px;
+			width:680px;
 			font-size:16px;
+			background-color:#ffffff;
+			box-shadow: 10px 10px 5px rgba(0,0,0,.01);
+			border-radius:6px;
 		}
 		.input-wrapper{
 			width:100%;

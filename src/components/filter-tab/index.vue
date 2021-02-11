@@ -3,26 +3,38 @@
 		<div class="unfinished-length">{{unfinished_todo_length}} items left</div>
 		<section class="filter-container">
 			<span 
-				class="filter-text" 
-				:class="{active:current_filter == 'all' ? true : false}" @click.stop="set_filter('all')"
-			>All</span>
-			<span 
-				class="filter-text" 
-				:class="{active:current_filter == 'finished' ? true : false}" @click.stop="set_filter('finished')"
-			>Finished</span>
-			<span class="filter-text" 
-				:class="{active:current_filter == 'unfinished' ? true : false}" 
-				@click.stop="set_filter('unfinished')"
-			>Unfinished</span>
+				v-for="(tab,index) in tabs" :key="'tab-'+index"
+				@click.stop="set_filter(tab['value'])"
+				class="filter-text"
+				:class="{active:current_filter == tab['value'] ? true : false}"
+			>{{tab['name']}}</span>
 		</section>
-		<div class="clear-text" @click.stop="clear">clear</div>
+		<div class="clear-text" @click.stop="clear">清空</div>
 	</div>
 </template>
 
 <script>
 	const ALL = "all";
 	export default {
-		name:"filtered",
+		name:"filter-tab",
+		data(){
+			return {
+					tabs:[
+						{
+							name:'All',
+							value:'all'
+						},
+						{
+							name:'Unfinished',
+							value:'unfinished'
+						},
+						{
+							name:'finished',
+							value:'finished'
+						}
+					]
+			}
+		},
 		props:{
 			current_filter:{
 				type:String,
@@ -46,7 +58,7 @@
 
 <style lang="scss" scoped>
 	.filter-wrapper{
-		padding-top:5px;
+		padding-top:8px;
 		padding-bottom:5px;
 		display:flex;
 		line-height:40px;
@@ -59,6 +71,7 @@
 		.filter-container{
 			padding-left:24px;
 			flex:1;
+			user-select:none;
 		}
 		.clear-text{
 			color:rgba(0,0,0,.45);
@@ -69,7 +82,7 @@
 		}
 		.filter-text{
 			padding:0 10px;
-			color:rgba(0,0,0,.65);
+			color:#314659;
 			cursor:pointer;
 			user-select:none;
 			&:hover{

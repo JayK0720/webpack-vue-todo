@@ -30,7 +30,7 @@ module.exports = {
 ```
 	加载images图像
 	
-		在webpack5中,可以使用内置的Asset Modules处理images和fonts等资源。通过添加4种新的模块类型来替换这些loader:
-			asset/resource	发送一个单独的文件并导出URL ---> file-loader
-			asset/inline		导出一个资源的data URL			---> url-loader
-			asset/source		导出资源的源代码						---> raw-loader
+	在webpack5中,可以使用内置的Asset Modules处理images和fonts等资源。通过添加4种新的模块类型来替换这些loader:
+		asset/resource	发送一个单独的文件并导出URL ---> file-loader
+		asset/inline		导出一个资源的data URL			---> url-loader
+		asset/source		导出资源的源代码						---> raw-loader
