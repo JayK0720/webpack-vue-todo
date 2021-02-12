@@ -1,8 +1,11 @@
 <template>
 	<ul class="todo-list">
 		<li v-for="(todo,index) in list" :key="'todo-'+index" class="todo-item">
-			<a-checkbox v-model='todo["completed"]'></a-checkbox>
-			<span class="todo-text" :class="{'completed': todo.completed ? true : false}">{{todo['text']}}</span>
+			<a-checkbox v-model='todo["completed"]' :id="'todo-'+index"></a-checkbox>
+			<label 
+				class="todo-text" :class="{'completed': todo.completed ? true : false}"
+				:for="'todo-'+index"
+			>{{todo['text']}}</label>
 			<span class="delete-text" @click.stop="delete_todo(todo['id'])">
 				<a-icon type="close" class="close-icon"/>
 			</span>

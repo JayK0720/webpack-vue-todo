@@ -29,7 +29,7 @@
 							value:'unfinished'
 						},
 						{
-							name:'finished',
+							name:'Finished',
 							value:'finished'
 						}
 					]

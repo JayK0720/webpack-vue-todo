@@ -2,6 +2,7 @@ const path = require("path");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 let development = process.env.NODE_ENV;
 
 module.exports = {
@@ -30,9 +31,11 @@ module.exports = {
 			{
 				test:/\.(scss|css)$/,
 				use:[
-					'style-loader',
+          process.env.NODE_ENV !== 'production'
+            ? 'vue-style-loader'
+            : MiniCssExtractPlugin.loader,
 					{
-						loader:"css-loader",
+						loader:'css-loader',
 						options:{
 							importLoaders:1
 						}
@@ -59,6 +62,9 @@ module.exports = {
 		new VueLoaderPlugin(),
 		new HtmlWebpackPlugin({
 			title:'webpack-vue-todolist'
+		}),
+		new MiniCssExtractPlugin({
+			filename: 'style.css'
 		})
 	],
 	devServer:{
@@ -69,6 +75,7 @@ module.exports = {
 		overlay:{
 			errors:true
 		},
+		historyApiFallback:true,
 		hot:true
 	},
 	resolve:{

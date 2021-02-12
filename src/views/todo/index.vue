@@ -21,7 +21,7 @@
 			<div class="todo-list-wrapper" v-if="filter_todo_list.length">
 				<todo-list :list="filter_todo_list" @delete="delete_todo"></todo-list>
 			</div>
-			<a-empty v-else description="暂无数据"></a-empty>
+			<a-empty v-else description="暂无数据"/>
 		</div>
 	</div>
 </template>
@@ -51,11 +51,16 @@
 				if(this.current_filter == ALL){
 					return this.todo_list;
 				}
-				if(this.current_filter == FINISHED){
-					return this.todo_list.filter(todo => todo['completed'])
-				}else{
-					return this.todo_list.filter(todo => !todo['completed'])
-				}
+				
+				// if(this.current_filter == FINISHED){
+				// 	return this.todo_list.filter(todo => todo['completed'])
+				// }else{
+				// 	return this.todo_list.filter(todo => !todo['completed'])
+				// }
+				
+				// 先计算当前点击的是 已经完成还是未完成,然后再根据todo的completed属性
+				let completed = this.current_filter == FINISHED ? true : false;
+				return this.todo_list.filter(todo => todo['completed'] == completed);
 			},
 			unfinished_todo_length(){
 				return this.todo_list.filter(todo => !todo.completed).length;
@@ -73,7 +78,7 @@
 					return;
 				}
 				let id = new Date().getTime();
-				this.todo_list.push({
+				this.todo_list.unshift({
 					completed:false,
 					id,
 					text:this.todo
@@ -84,7 +89,6 @@
 				this.current_filter = filter;
 			},
 			delete_todo(id){
-				let index = this.todo_list.findIndex(todo => todo['id'] == id);
 				this.$confirm({
 					title:"删除事项",
 					content:h => <div style="color:#f81d22;">确定删除此条记录吗</div>,
@@ -92,7 +96,7 @@
 					cancelText:"我再想想",
 					okType:"danger",
 					onOk:() => {
-						this.todo_list.splice(index,1);
+						this.todo_list.splice( this.todo_list.findIndex(todo => todo['id'] == id),1);
 					},
 				})
 			},

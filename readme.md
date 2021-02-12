@@ -34,3 +34,5 @@ module.exports = {
 		asset/resource	发送一个单独的文件并导出URL ---> file-loader
 		asset/inline		导出一个资源的data URL			---> url-loader
 		asset/source		导出资源的源代码						---> raw-loader
+		
+	
