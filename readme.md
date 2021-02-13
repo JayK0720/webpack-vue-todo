@@ -35,4 +35,6 @@ module.exports = {
 		asset/inline		导出一个资源的data URL			---> url-loader
 		asset/source		导出资源的源代码						---> raw-loader
 		
+	遇到的报错:
+	The 'compilation' argument must be an instance of Compilation
 	

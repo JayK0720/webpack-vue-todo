@@ -2,7 +2,7 @@ const path = require("path");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 let development = process.env.NODE_ENV;
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 	devtool:'inline-source-map',
 	entry:path.join(__dirname,'src/main.js'),
 	output:{
-		filename:"bundle.js",
+		filename:'[name].[chunkhash:8].js',
 		path:path.join(__dirname,'dist')
 	},
 	module:{
@@ -31,9 +31,6 @@ module.exports = {
 			{
 				test:/\.(scss|css)$/,
 				use:[
-          process.env.NODE_ENV !== 'production'
-            ? 'vue-style-loader'
-            : MiniCssExtractPlugin.loader,
 					{
 						loader:'css-loader',
 						options:{
@@ -61,10 +58,8 @@ module.exports = {
 		new CleanWebpackPlugin(),
 		new VueLoaderPlugin(),
 		new HtmlWebpackPlugin({
-			title:'webpack-vue-todolist'
-		}),
-		new MiniCssExtractPlugin({
-			filename: 'style.css'
+			title:'webpack-vue-todolist',
+			template:path.join(__dirname,'src/public/index.html')
 		})
 	],
 	devServer:{
