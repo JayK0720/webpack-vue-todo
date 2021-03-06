@@ -8,8 +8,6 @@ Vue.component(Button.name,Button);
 Vue.use(Modal);
 Vue.prototype.$message = message;
 Vue.prototype.$confirm = Modal.confirm;
-// let root = document.createElement("div");
-// document.body.append(root);
 new Vue({
 	el:"#root",
 	render:(h) => h(App),
