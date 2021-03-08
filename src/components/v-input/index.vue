@@ -1,5 +1,10 @@
 <template>
-	<input :type="type" class='input' @input="value_change">
+	<input 
+		:type="type" 
+		class='input' 
+		@input="value_change"
+		@keyup.enter="keyup"
+	>
 </template>
 
 <script>
@@ -18,6 +23,9 @@
 		methods:{
 			value_change(event){
 				this.$emit("input",event.target.value);
+			},
+			keyup(){
+				this.$emit('keyup');
 			}
 		}
 	}
