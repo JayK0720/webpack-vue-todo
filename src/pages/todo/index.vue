@@ -7,7 +7,12 @@
 				<v-button @click="add">添加</v-button>
 			</div>
 			<div class="list-wrapper">
-				<todo-list :list="todo_list" v-if="todo_list.length"></todo-list>
+				<template v-if="todo_list.length">
+					<todo-list
+						:list="todo_list"
+						@delete="delete_todo"
+					></todo-list>
+				</template>
 				<empty v-else/>
 			</div>
 		</div>
@@ -50,6 +55,10 @@
 					window.alert("该代办事项已添加,不能重复添加");
 					return;
 				}
+			},
+			delete_todo(id){
+				let index = this.todo_list.findIndex(todo => todo['id'] == id);
+				this.todo_list.splice(index,1);
 			}
 		}
 	}
