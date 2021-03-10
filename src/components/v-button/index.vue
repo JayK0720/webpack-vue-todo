@@ -23,8 +23,8 @@
 
 <style lang="scss" scoped>
 	.button{
-		width:56px;
-		height:32px;
+		width:70px;
+		height:40px;
 		outline:none;
 		color:#ffffff;
 		cursor:pointer;

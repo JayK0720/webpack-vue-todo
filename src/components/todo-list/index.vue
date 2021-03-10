@@ -36,7 +36,7 @@
 	.list{
 		.todo-item{
 			display:flex;
-			height:40px;
+			height:50px;
 			justify-content:space-between;
 			padding-right:10px;
 			align-items:center;
@@ -46,6 +46,7 @@
 		.todo{
 			padding-left:5px;
 			color:rgba(0,0,0,.65);
+			font-weight:bold;
 		}
 		.close-button{
 			font-size:14px;
