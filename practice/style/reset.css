@@ -1,0 +1,7 @@
+html,body,p,ul,ol,input,textarea,table{
+	padding: 0;
+	margin: 0;
+}
+ul,ol{
+	list-style:none;
+}
